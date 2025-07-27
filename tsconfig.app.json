@@ -27,5 +27,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["app/javascript"]
+  "include": [
+    "app/frontend",
+    "app/frontend/vite-env.d.ts",
+    "app/frontend/pages",
+    "app/frontend/application.js",
+    "app/frontend/controllers",
+    "app/frontend/assets",
+    "app/frontend/entrypoints"
+  ]
 }

@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { ClubType } from "./types";
 import { GameType } from "../Game/types";
+import { Button } from "@/components/ui/button";
 
 interface ShowProps {
   club: ClubType;
@@ -26,12 +27,7 @@ export default function Show({ club, games, flash }: ShowProps) {
             <div key={game.id}> {game.buy_in} </div>
           ))}
 
-          <Link
-            href={`/clubs/${club.id}/edit`}
-            className="mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-          >
-            Edit this club
-          </Link>
+          <Button className=""> Hello </Button>
           <Link
             href="/clubs"
             className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
