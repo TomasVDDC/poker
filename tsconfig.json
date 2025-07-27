@@ -1,5 +1,12 @@
 {
   "files": [],
+  "compilerOptions": {
+    /* Required for shadcn-ui/ui */
+    "baseUrl": "./app/frontend",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"
