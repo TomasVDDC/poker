@@ -1,16 +1,17 @@
-import { Head, Link } from "@inertiajs/react";
-import { Fragment } from "react";
-import { ClubType } from "./types";
+import { Head, Link } from '@inertiajs/react'
+import { Fragment } from 'react'
+import Game from './Game'
+import { GameType } from './types'
 
 interface IndexProps {
-  clubs: ClubType[];
-  flash: { notice?: string };
+  games: GameType[]
+  flash: { notice?: string }
 }
 
-export default function Index({ clubs, flash }: IndexProps) {
+export default function Index({ games, flash }: IndexProps) {
   return (
     <>
-      <Head title="Clubs" />
+      <Head title="Games" />
       <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         {flash.notice && (
           <p className="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block">
@@ -18,25 +19,25 @@ export default function Index({ clubs, flash }: IndexProps) {
           </p>
         )}
         <div className="flex justify-between items-center">
-          <h1 className="font-bold text-4xl">Clubs</h1>
+          <h1 className="font-bold text-4xl">Games</h1>
           <Link
-            href="/clubs/new"
+            href="/games/new"
             className="rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium"
           >
-            New club
+            New game
           </Link>
         </div>
 
         <div className="min-w-full">
-          {clubs.map((club) => (
-            <Fragment key={club.id}>
-              <div> {club.name} </div>
+          {games.map((game) => (
+            <Fragment key={game.id}>
+              <Game game={game} />
               <p>
                 <Link
-                  href={`/clubs/${club.id}`}
+                  href={`/games/${game.id}`}
                   className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
                 >
-                  Show this club
+                  Show this game
                 </Link>
               </p>
             </Fragment>
@@ -44,5 +45,5 @@ export default function Index({ clubs, flash }: IndexProps) {
         </div>
       </div>
     </>
-  );
+  )
 }
