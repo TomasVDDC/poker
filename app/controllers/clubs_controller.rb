@@ -1,3 +1,5 @@
+include ActionView::Helpers::NumberHelper
+
 class ClubsController < ApplicationController
   before_action :set_club, only: %i[ show edit update destroy ]
 
@@ -84,7 +86,8 @@ class ClubsController < ApplicationController
 
     def serialize_game(game)
       game.as_json(only: [
-        :id, :buy_in
-      ])
+        :id, :club_id
+      ]).merge( formatted_created_at: game.created_at.to_date.to_formatted_s(:long_ordinal),
+        formatted_buy_in: number_to_currency(game.buy_in))
     end
 end

@@ -1,11 +1,12 @@
 import { Link } from "@inertiajs/react";
 import { ClubType } from "./types";
-import { GameType } from "../Game/types";
+import { GameListItemType } from "../Game/types";
 import { Button } from "@/components/ui/button";
+import { GameTable, ColumnHeaders } from "./components/GameTable";
 
 interface ShowProps {
   club: ClubType;
-  games: GameType[];
+  games: GameListItemType[];
   flash: { notice?: string };
 }
 
@@ -24,9 +25,10 @@ export default function Show({ club, games, flash }: ShowProps) {
           <h1 className="font-bold text-4xl"> {club.name}</h1>
 
           {games.map((game) => (
-            <div key={game.id}> {game.buy_in} </div>
+            <div key={game.id}> {game.formatted_buy_in} </div>
           ))}
 
+          <GameTable columns={ColumnHeaders} games={games} />
           <Button className=""> Hello </Button>
           <Link
             href="/clubs"
