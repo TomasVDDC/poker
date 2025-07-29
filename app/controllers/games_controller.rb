@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: %i[ show edit update destroy ]
-  before_action :set_club, only: %i[ new create]
+  before_action :set_club, only: %i[ new create update destroy]
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -41,9 +41,8 @@ class GamesController < ApplicationController
   def create
     @game = @club.games.build(game_params)
 
-
     if @game.save
-      redirect_to club_games_path(@club), notice: "Game was successfully created."
+      redirect_to club_path(@club), notice: "Game was successfully created."
     else
       redirect_to new_club_game_url, inertia: { errors: @game.errors }
     end
@@ -52,7 +51,7 @@ class GamesController < ApplicationController
   # PATCH/PUT /games/1
   def update
     if @game.update(game_params)
-      redirect_to @game, notice: "Game was successfully updated."
+      redirect_to club_path(@club), notice: "Game was successfully updated."
     else
       redirect_to edit_game_url(@game), inertia: { errors: @game.errors }
     end
@@ -61,7 +60,7 @@ class GamesController < ApplicationController
   # DELETE /games/1
   def destroy
     @game.destroy!
-    redirect_to games_url, notice: "Game was successfully destroyed."
+    redirect_to club_path(@club), notice: "Game was successfully destroyed."
   end
 
   private
@@ -81,7 +80,7 @@ class GamesController < ApplicationController
 
     def serialize_game(game)
       game.as_json(only: [
-        :id, :buy_in
+        :id, :club_id, :buy_in
       ])
     end
 

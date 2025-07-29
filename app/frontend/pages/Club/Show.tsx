@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { ClubType } from "./types";
 import { GameListItemType } from "../Game/types";
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,19 @@ export default function Show({ club, games, flash }: ShowProps) {
 
           <h1 className="font-bold text-4xl"> {club.name}</h1>
 
-          {games.map((game) => (
-            <div key={game.id}> {game.formatted_buy_in} </div>
-          ))}
+          <div className="my-10">
+            <div className="flex flex-row">
+              <h1 className="font-bold text-2xl mr-auto"> Game Log</h1>
+              <Button
+                className="my-2"
+                onClick={() => router.visit(`/clubs/${club.id}/games/new`)}
+              >
+                New Game
+              </Button>
+            </div>
+            <GameTable columns={ColumnHeaders} games={games} />
+          </div>
 
-          <GameTable columns={ColumnHeaders} games={games} />
-          <Button className=""> Hello </Button>
           <Link
             href="/clubs"
             className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
@@ -41,9 +48,17 @@ export default function Show({ club, games, flash }: ShowProps) {
               href={`/clubs/${club.id}`}
               as="button"
               method="delete"
-              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium"
+              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium cursor-pointer"
             >
               Destroy this club
+            </Link>
+            <Link
+              href={`/clubs/${club.id}/edit`}
+              as="button"
+              method="get"
+              className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium cursor-pointer"
+            >
+              Edit this club
             </Link>
           </div>
         </div>

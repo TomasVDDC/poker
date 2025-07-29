@@ -1,6 +1,7 @@
 // Mathes the game model
 export interface GameType {
   id: number;
+  club_id: number;
   buy_in: number;
 }
 

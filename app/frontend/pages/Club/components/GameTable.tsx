@@ -67,18 +67,28 @@ function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+            table.getRowModel().rows.map((row) => {
+              const game = row.original;
+              return (
+                <TableRow
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.visit(`/clubs/${game.club_id}/games/${game.id}/`);
+                  }}
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
@@ -129,10 +139,17 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                router.visit(`/clubs/${game.club_id}/games/${game.id}`)
+                router.visit(`/clubs/${game.club_id}/games/${game.id}/edit`)
               }
             >
               Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                router.delete(`/clubs/${game.club_id}/games/${game.id}`)
+              }
+            >
+              Delete
             </DropdownMenuItem>
             {/* <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
@@ -149,7 +166,7 @@ export function GameTable(props: {
   games: GameListItemType[];
 }) {
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto">
       <DataTable columns={props.columns} data={props.games} />
     </div>
   );

@@ -1,9 +1,9 @@
-import { Head, Link } from '@inertiajs/react'
-import Form from './Form'
-import { GameType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import Form from "./Form";
+import { GameType } from "./types";
 
 interface EditProps {
-  game: GameType
+  game: GameType;
 }
 
 export default function Edit({ game }: EditProps) {
@@ -17,25 +17,12 @@ export default function Edit({ game }: EditProps) {
         <Form
           game={game}
           onSubmit={(form) => {
-            form.transform((data) => ({ game: data }))
-            form.patch(`/games/${game.id}`)
+            form.transform((data) => ({ game: data }));
+            form.patch(`/clubs/${game.club_id}/games/${game.id}`);
           }}
           submitText="Update Game"
         />
-
-        <Link
-          href={`/games/${game.id}`}
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-        >
-          Show this game
-        </Link>
-        <Link
-          href="/games"
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-        >
-          Back to games
-        </Link>
       </div>
     </>
-  )
+  );
 }
