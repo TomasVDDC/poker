@@ -135,7 +135,7 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
