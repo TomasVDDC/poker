@@ -166,7 +166,7 @@ export function GameTable(props: {
   games: GameListItemType[];
 }) {
   return (
-    <div className="container mx-auto">
+    <div className="">
       <DataTable columns={props.columns} data={props.games} />
     </div>
   );
