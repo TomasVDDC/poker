@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :player_sessions
+  resources :players
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # /clubs/:club_id/games/new
