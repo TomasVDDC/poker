@@ -1,9 +1,9 @@
-import { Head, Link } from '@inertiajs/react'
-import Form from './Form'
-import { PlayerSessionType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import PlayerSessionForm from "./Form";
+import { PlayerSessionType } from "./types";
 
 interface EditProps {
-  player_session: PlayerSessionType
+  player_session: PlayerSessionType;
 }
 
 export default function Edit({ player_session }: EditProps) {
@@ -14,14 +14,7 @@ export default function Edit({ player_session }: EditProps) {
       <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         <h1 className="font-bold text-4xl">Editing player session</h1>
 
-        <Form
-          player_session={player_session}
-          onSubmit={(form) => {
-            form.transform((data) => ({ player_session: data }))
-            form.patch(`/player_sessions/${player_session.id}`)
-          }}
-          submitText="Update Player session"
-        />
+        <PlayerSessionForm action={`/player_sessions/${player_session.id}`} />
 
         <Link
           href={`/player_sessions/${player_session.id}`}
@@ -37,5 +30,5 @@ export default function Edit({ player_session }: EditProps) {
         </Link>
       </div>
     </>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { Head, Link } from '@inertiajs/react'
-import Form from './Form'
-import { PlayerType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import Form from "./Form";
+import { PlayerType } from "./types";
 
 interface EditProps {
-  player: PlayerType
+  player: PlayerType;
 }
 
 export default function Edit({ player }: EditProps) {
@@ -17,8 +17,8 @@ export default function Edit({ player }: EditProps) {
         <Form
           player={player}
           onSubmit={(form) => {
-            form.transform((data) => ({ player: data }))
-            form.patch(`/players/${player.id}`)
+            form.transform((data) => ({ player: data }));
+            form.patch(`/clubs/${player.club_id}/players/${player.id}`);
           }}
           submitText="Update Player"
         />
@@ -37,5 +37,5 @@ export default function Edit({ player }: EditProps) {
         </Link>
       </div>
     </>
-  )
+  );
 }

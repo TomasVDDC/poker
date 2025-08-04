@@ -1,12 +1,12 @@
-import { Head, Link } from '@inertiajs/react'
-import Form from './Form'
-import { PlayerType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import Form from "./Form";
+import { PlayerType } from "./types";
 
 interface NewProps {
-  player: PlayerType
+  player: PlayerType;
 }
 
-export default function New({ player }: NewProps) {
+export default function New({ club, player }: NewProps) {
   return (
     <>
       <Head title="New player" />
@@ -17,8 +17,8 @@ export default function New({ player }: NewProps) {
         <Form
           player={player}
           onSubmit={(form) => {
-            form.transform((data) => ({ player: data }))
-            form.post('/players')
+            form.transform((data) => ({ player: data }));
+            form.post(`/clubs/${club.id}/players`);
           }}
           submitText="Create Player"
         />
@@ -31,5 +31,5 @@ export default function New({ player }: NewProps) {
         </Link>
       </div>
     </>
-  )
+  );
 }

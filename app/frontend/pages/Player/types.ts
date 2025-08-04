@@ -1,6 +1,7 @@
 export interface PlayerType {
-  id: number
-  name: string
+  id: number;
+  club_id: number;
+  name: string;
 }
 
-export type PlayerFormType = Omit<PlayerType, 'id'>
+export type PlayerFormType = Omit<PlayerType, "id">;

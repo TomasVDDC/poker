@@ -42,6 +42,7 @@ class PlayerSessionsController < ApplicationController
 
   # POST /player_sessions
   def create
+
     @player_session = PlayerSession.new(player_session_params)
 
     if @player_session.save

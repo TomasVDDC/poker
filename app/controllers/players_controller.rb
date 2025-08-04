@@ -1,5 +1,7 @@
 class PlayersController < ApplicationController
   before_action :set_player, only: %i[ show edit update destroy ]
+  before_action :set_club, only: %i[ new create update destroy]
+
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -24,6 +26,7 @@ class PlayersController < ApplicationController
   def new
     @player = Player.new
     render inertia: 'Player/New', props: {
+      club: serialize_club(@club),
       player: serialize_player(@player)
     }
   end
@@ -37,19 +40,19 @@ class PlayersController < ApplicationController
 
   # POST /players
   def create
-    @player = Player.new(player_params)
+    @player = @club.players.build(player_params)
 
     if @player.save
-      redirect_to @player, notice: "Player was successfully created."
+      redirect_to club_path(@club), notice: "Player was successfully created."
     else
-      redirect_to new_player_url, inertia: { errors: @player.errors }
+      redirect_to club_url, inertia: { errors: @player.errors }
     end
   end
 
   # PATCH/PUT /players/1
   def update
     if @player.update(player_params)
-      redirect_to @player, notice: "Player was successfully updated."
+      redirect_to club_path(@club), notice: "Player was successfully updated."
     else
       redirect_to edit_player_url(@player), inertia: { errors: @player.errors }
     end
@@ -58,13 +61,17 @@ class PlayersController < ApplicationController
   # DELETE /players/1
   def destroy
     @player.destroy!
-    redirect_to players_url, notice: "Player was successfully destroyed."
+    redirect_to club_path(@club), notice: "Player was successfully destroyed."
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_player
       @player = Player.find(params[:id])
+    end
+
+    def set_club
+      @club = Club.find(params[:club_id])
     end
 
     # Only allow a list of trusted parameters through.
@@ -74,7 +81,14 @@ class PlayersController < ApplicationController
 
     def serialize_player(player)
       player.as_json(only: [
-        :id, :name
+        :id,:club_id, :name
       ])
     end
+
+    def serialize_club(club)
+      club.as_json(only: [
+        :id
+      ])
+    end
+
 end

@@ -1,5 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
-import Form from "./Form";
+import PlayerSessionForm from "./Form";
 import { PlayerSessionType } from "./types";
 import { PlayerType } from "../Player/types";
 
@@ -17,14 +17,7 @@ export default function New({ player_session, players }: NewProps) {
       <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         <h1 className="font-bold text-4xl">New player session</h1>
 
-        <Form
-          player_session={player_session}
-          onSubmit={(form) => {
-            form.transform((data) => ({ player_session: data }));
-            form.post("/player_sessions");
-          }}
-          submitText="Create Player session"
-        />
+        <PlayerSessionForm action="" />
 
         <Link
           href="/player_sessions"
