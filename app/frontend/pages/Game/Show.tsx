@@ -1,13 +1,16 @@
-import { Head, Link } from '@inertiajs/react'
-import Game from './Game'
-import { GameType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import Game from "./Game";
+import { GameType } from "./types";
+import { PlayerSessionTable } from "./components/PlayerSessionTable";
+import { PlayerSessionType } from "../PlayerSession/types";
 
 interface ShowProps {
-  game: GameType
-  flash: { notice?: string }
+  game: GameType;
+  player_sessions: PlayerSessionType[];
+  flash: { notice?: string };
 }
 
-export default function Show({ game, flash }: ShowProps) {
+export default function Show({ game, player_sessions, flash }: ShowProps) {
   return (
     <>
       <Head title={`Game #${game.id}`} />
@@ -23,6 +26,7 @@ export default function Show({ game, flash }: ShowProps) {
           <h1 className="font-bold text-4xl">Game #{game.id}</h1>
 
           <Game game={game} />
+          <PlayerSessionTable player_sessions={player_sessions} />
 
           <Link
             href={`/games/${game.id}/edit`}
@@ -49,5 +53,5 @@ export default function Show({ game, flash }: ShowProps) {
         </div>
       </div>
     </>
-  )
+  );
 }

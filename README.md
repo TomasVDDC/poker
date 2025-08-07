@@ -1,5 +1,7 @@
 # README
 
+-> Have to create player_sessions and add them to a game , can use the player_session form in the game form.
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

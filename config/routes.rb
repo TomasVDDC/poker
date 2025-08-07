@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
-  resources :player_sessions
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # /clubs/:club_id/games/new
   # Allows us to access the club id directly from the url params. club id needed when creating a game
   resources :clubs do
-    resources :games
+    resources :games do
+      resources :player_sessions
+    end
     resources :players
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -53,7 +53,7 @@ export default function Show({ club, players, games, flash }: ShowProps) {
                 New Game
               </Button>
             </div>
-            <GameTable columns={ColumnHeaders} games={games} />
+            <GameTable games={games} />
           </div>
 
           <Link

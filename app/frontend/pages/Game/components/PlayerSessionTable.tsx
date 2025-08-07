@@ -1,5 +1,5 @@
 // The game table component is the combination of the shadcn table component and tanstack react table
-import { GameListItemType } from "@/pages/Game/types";
+import { PlayerSessionListItemType } from "@/pages/PlayerSession/types";
 // react-table
 import {
   ColumnDef,
@@ -68,12 +68,12 @@ function DataTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
-              const game = row.original;
+              const player_session = row.original;
               return (
                 <TableRow
                   className="cursor-pointer"
                   onClick={() => {
-                    router.visit(`/clubs/${game.club_id}/games/${game.id}/`);
+                    router.visit(`/player_sessions/${player_session.id}/`);
                   }}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -103,7 +103,7 @@ function DataTable<TData, TValue>({
 }
 // Initialising our instance of the datable, with our game specific type and value
 
-export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
+export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
   {
     accessorKey: "formatted_created_at",
     header: () => <div className="text-xl text-right"> Date </div>,
@@ -114,18 +114,27 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
     },
   },
   {
-    accessorKey: "formatted_buy_in",
-    header: () => <div className="text-xl text-right"> Buy In </div>,
+    accessorKey: "formatted_winnings",
+    header: () => <div className="text-xl text-right"> Winnings </div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right">{row.getValue("formatted_buy_in")}</div>
+        <div className="text-right">{row.getValue("formatted_winnings")}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "number_of_buy_ins",
+    header: () => <div className="text-xl text-right"> Number of Buy Ins </div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-right">{row.getValue("number_of_buy_ins")}</div>
       );
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const game = row.original;
+      const player_session = row.original;
 
       return (
         <DropdownMenu>
@@ -139,14 +148,14 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                router.visit(`/clubs/${game.club_id}/games/${game.id}/edit`)
+                router.visit(`/player_sessions/${player_session.id}`)
               }
             >
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                router.delete(`/clubs/${game.club_id}/games/${game.id}`)
+                router.visit(`/player_sessions/${player_session.id}`)
               }
             >
               Delete
@@ -161,10 +170,12 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   },
 ];
 
-export function GameTable(props: { games: GameListItemType[] }) {
+export function PlayerSessionTable(props: {
+  player_sessions: PlayerSessionListItemType[];
+}) {
   return (
     <div className="">
-      <DataTable columns={ColumnHeaders} data={props.games} />
+      <DataTable columns={ColumnHeaders} data={props.player_sessions} />
     </div>
   );
 }

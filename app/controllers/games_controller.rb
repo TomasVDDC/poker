@@ -16,8 +16,12 @@ class GamesController < ApplicationController
 
   # GET /games/1
   def show
+    @player_sessions = @game.player_sessions
     render inertia: 'Game/Show', props: {
-      game: serialize_game(@game)
+      game: serialize_game(@game),
+      player_sessions: @player_sessions.map do |player_session|
+          serialize_player_session(player_session)
+      end
     }
   end
 
@@ -88,6 +92,14 @@ class GamesController < ApplicationController
       club.as_json(only: [
         :id
       ])
+    end
+
+    def serialize_player_session(player_session)
+      player_session.as_json(only: [
+        :id, :number_of_buy_ins, :winnings
+      ]).merge( formatted_created_at: player_session.created_at.to_date.to_formatted_s(:long_ordinal),
+        formatted_winnings: number_to_currency(player_session.winnings))
+
     end
 
 end
