@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: %i[ show edit update destroy ]
-  before_action :set_club, only: %i[ new create update destroy]
+  before_action :set_club, only: %i[show new create update destroy]
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -18,9 +18,10 @@ class GamesController < ApplicationController
   def show
     @player_sessions = @game.player_sessions
     render inertia: 'Game/Show', props: {
+      club: serialize_club(@club),
       game: serialize_game(@game),
       player_sessions: @player_sessions.map do |player_session|
-          serialize_player_session(player_session)
+          serialize_player_session(player_session,@game.buy_in)
       end
     }
   end
@@ -94,12 +95,14 @@ class GamesController < ApplicationController
       ])
     end
 
-    def serialize_player_session(player_session)
+    def serialize_player_session(player_session,buy_in)
       player_session.as_json(only: [
-        :id, :number_of_buy_ins, :winnings
-      ]).merge( formatted_created_at: player_session.created_at.to_date.to_formatted_s(:long_ordinal),
-        formatted_winnings: number_to_currency(player_session.winnings))
+        :id, :game_id, :number_of_buy_ins, :winnings
+      ]).merge( club_id: params[:club_id],player_name: player_session.player.name, formatted_created_at: player_session.created_at.to_date.to_formatted_s(:long_ordinal),
+        formatted_winnings: number_to_currency(player_session.winnings), net_profit_or_loss: number_to_currency(calculate_net_profit_or_loss(player_session,buy_in)))
 
     end
-
+    def calculate_net_profit_or_loss(player_session,buy_in)
+      net_profit_or_loss = player_session.winnings - (player_session.number_of_buy_ins * buy_in)
+    end
 end

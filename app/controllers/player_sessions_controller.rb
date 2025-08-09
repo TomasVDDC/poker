@@ -1,5 +1,8 @@
 class PlayerSessionsController < ApplicationController
   before_action :set_player_session, only: %i[ show edit update destroy ]
+  before_action :set_club, only: %i[ create new show edit update destroy ]
+  before_action :set_game, only: %i[ create new show edit update destroy ]
+  before_action :set_player, only: %i[ create ]
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -23,9 +26,11 @@ class PlayerSessionsController < ApplicationController
   # GET /player_sessions/new
   def new
     @player_session = PlayerSession.new
-    @players = Player.all
+    @players = @club.players
 
     render inertia: 'PlayerSession/New', props: {
+      club: serialize_club(@club),
+      game: serialize_game(@game),
       player_session: serialize_player_session(@player_session),
       players: @players.map do |player|
         serialize_player(player)
@@ -36,28 +41,31 @@ class PlayerSessionsController < ApplicationController
   # GET /player_sessions/1/edit
   def edit
     render inertia: 'PlayerSession/Edit', props: {
+      club: serialize_club(@club),
       player_session: serialize_player_session(@player_session)
     }
   end
 
   # POST /player_sessions
   def create
-
-    @player_session = PlayerSession.new(player_session_params)
+    @player_session = PlayerSession.new(player_session_params.merge(
+        game_id: @game.id,
+        player_id: @player.id
+    ))
 
     if @player_session.save
-      redirect_to @player_session, notice: "Player session was successfully created."
+      redirect_to club_game_path({club_id: @club.id, id: @game.id}), notice: "Player session was successfully created."
     else
-      redirect_to new_player_session_url, inertia: { errors: @player_session.errors }
+      redirect_to new_club_game_url, inertia: { errors: @player_session.errors }
     end
   end
 
   # PATCH/PUT /player_sessions/1
   def update
     if @player_session.update(player_session_params)
-      redirect_to @player_session, notice: "Player session was successfully updated."
+      redirect_to club_game_path({club_id: @club.id, id: @game.id}), notice: "Player session was successfully updated."
     else
-      redirect_to edit_player_session_url(@player_session), inertia: { errors: @player_session.errors }
+      redirect_to new_club_game_url, inertia: { errors: @player_session.errors }
     end
   end
 
@@ -73,14 +81,40 @@ class PlayerSessionsController < ApplicationController
       @player_session = PlayerSession.find(params[:id])
     end
 
+    def set_club
+      logger.info "Params: #{params}"
+      @club = Club.find(params[:club_id])
+    end
+
+    def set_game
+      @game= Game.find(params[:game_id])
+    end
+
+    def set_player
+      logger.info "Params: #{params}"
+      @player= Player.find(params[:player_id])
+   end
+
     # Only allow a list of trusted parameters through.
     def player_session_params
       params.require(:player_session).permit(:number_of_buy_ins, :winnings)
     end
 
+    def serialize_club(club)
+      club.as_json(only: [
+        :id
+      ])
+    end
+
+    def serialize_game(game)
+      game.as_json(only: [
+        :id
+      ])
+    end
+
     def serialize_player_session(player_session)
       player_session.as_json(only: [
-        :id, :number_of_buy_ins, :winnings
+        :id, :game_id, :number_of_buy_ins, :winnings
       ])
     end
 

@@ -1,16 +1,25 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import Game from "./Game";
 import { GameType } from "./types";
+import { ClubType } from "@/pages/Club/types";
 import { PlayerSessionTable } from "./components/PlayerSessionTable";
-import { PlayerSessionType } from "../PlayerSession/types";
+import { PlayerSessionListItemType } from "../PlayerSession/types";
+import { Button } from "@/components/ui/button";
 
 interface ShowProps {
+  club: ClubType;
   game: GameType;
-  player_sessions: PlayerSessionType[];
+  player_sessions: PlayerSessionListItemType[];
   flash: { notice?: string };
 }
 
-export default function Show({ game, player_sessions, flash }: ShowProps) {
+export default function Show({
+  club,
+  game,
+  player_sessions,
+  flash,
+}: ShowProps) {
+  console.log("Show props:", { club, game, player_sessions });
   return (
     <>
       <Head title={`Game #${game.id}`} />
@@ -25,8 +34,22 @@ export default function Show({ game, player_sessions, flash }: ShowProps) {
 
           <h1 className="font-bold text-4xl">Game #{game.id}</h1>
 
-          <Game game={game} />
-          <PlayerSessionTable player_sessions={player_sessions} />
+          <div className="my-10">
+            <div className="flex flex-row">
+              <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
+              <Button
+                className="my-2"
+                onClick={() =>
+                  router.visit(
+                    `/clubs/${club.id}/games/${game.id}/player_sessions/new`,
+                  )
+                }
+              >
+                New Player Session
+              </Button>
+            </div>
+            <PlayerSessionTable player_sessions={player_sessions} />
+          </div>
 
           <Link
             href={`/games/${game.id}/edit`}

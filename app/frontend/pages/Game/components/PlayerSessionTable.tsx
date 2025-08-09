@@ -73,7 +73,9 @@ function DataTable<TData, TValue>({
                 <TableRow
                   className="cursor-pointer"
                   onClick={() => {
-                    router.visit(`/player_sessions/${player_session.id}/`);
+                    router.visit(
+                      `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/edit`,
+                    );
                   }}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -105,12 +107,10 @@ function DataTable<TData, TValue>({
 
 export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
   {
-    accessorKey: "formatted_created_at",
-    header: () => <div className="text-xl text-right"> Date </div>,
+    accessorKey: "player_name",
+    header: () => <div className="text-xl text-right"> Name </div>,
     cell: ({ row }) => {
-      return (
-        <div className="text-right">{row.getValue("formatted_created_at")}</div>
-      );
+      return <div className="text-right">{row.getValue("player_name")}</div>;
     },
   },
   {
@@ -132,6 +132,15 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
     },
   },
   {
+    accessorKey: "net_profit_or_loss",
+    header: () => <div className="text-xl text-right"> Net Profit/Loss </div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-right">{row.getValue("net_profit_or_loss")}</div>
+      );
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const player_session = row.original;
@@ -148,7 +157,9 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                router.visit(`/player_sessions/${player_session.id}`)
+                router.visit(
+                  `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/edit`,
+                )
               }
             >
               Edit
