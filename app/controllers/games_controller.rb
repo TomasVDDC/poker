@@ -5,14 +5,14 @@ class GamesController < ApplicationController
   inertia_share flash: -> { flash.to_hash }
 
   # GET /games
-  def index
-    @games = Game.all
-    render inertia: 'Game/Index', props: {
-      games: @games.map do |game|
-        serialize_game(game)
-      end
-    }
-  end
+  # def index
+  #   @games = Game.all
+  #   render inertia: 'Game/Index', props: {
+  #     games: @games.map do |game|
+  #       serialize_game(game)
+  #     end
+  #   }
+  # end
 
   # GET /games/1
   def show

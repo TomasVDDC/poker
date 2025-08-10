@@ -15,8 +15,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_140506) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "player_id"
-    t.index ["player_id"], name: "index_clubs_on_player_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -46,7 +44,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_140506) do
     t.index ["club_id"], name: "index_players_on_club_id"
   end
 
-  add_foreign_key "clubs", "players"
   add_foreign_key "games", "clubs"
   add_foreign_key "player_sessions", "games"
   add_foreign_key "player_sessions", "players"

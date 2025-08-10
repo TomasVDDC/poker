@@ -26,7 +26,8 @@ class PlayerSessionsController < ApplicationController
   # GET /player_sessions/new
   def new
     @player_session = PlayerSession.new
-    @players = @club.players
+    # Don't show players that already have a session
+    @players = @club.players.reject { |o| @game.player_sessions.pluck(:player_id).include?(o.id)}
 
     render inertia: 'PlayerSession/New', props: {
       club: serialize_club(@club),
@@ -72,7 +73,7 @@ class PlayerSessionsController < ApplicationController
   # DELETE /player_sessions/1
   def destroy
     @player_session.destroy!
-    redirect_to player_sessions_url, notice: "Player session was successfully destroyed."
+    redirect_to club_game_path({club_id: @club.id, id: @game.id}), notice: "Player session was successfully destroyed."
   end
 
   private

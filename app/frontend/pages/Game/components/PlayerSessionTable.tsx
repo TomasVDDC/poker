@@ -166,7 +166,9 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                router.visit(`/player_sessions/${player_session.id}`)
+                router.delete(
+                  `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/`,
+                )
               }
             >
               Delete
