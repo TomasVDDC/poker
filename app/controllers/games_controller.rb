@@ -47,7 +47,7 @@ class GamesController < ApplicationController
     @game = @club.games.build(game_params)
 
     if @game.save
-      redirect_to club_path(@club), notice: "Game was successfully created."
+      redirect_to new_club_game_player_session_path(@club,@game), notice: "Game was successfully created."
     else
       redirect_to new_club_game_url, inertia: { errors: @game.errors }
     end

@@ -1,5 +1,4 @@
-import { Head, Link, router } from "@inertiajs/react";
-import Game from "./Game";
+import { Head, router } from "@inertiajs/react";
 import { GameType } from "./types";
 import { ClubType } from "@/pages/Club/types";
 import { PlayerSessionTable } from "./components/PlayerSessionTable";
@@ -38,7 +37,7 @@ export default function Show({
             <div className="flex flex-row">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
               <Button
-                className="my-2"
+                className="my-2 cursor-pointer"
                 onClick={() =>
                   router.visit(
                     `/clubs/${club.id}/games/${game.id}/player_sessions/new`,
@@ -51,28 +50,13 @@ export default function Show({
             <PlayerSessionTable player_sessions={player_sessions} />
           </div>
 
-          <Link
-            href={`/games/${game.id}/edit`}
-            className="mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+          <Button
+            className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
+            variant={"secondary"}
+            onClick={() => router.visit(`/clubs/${club.id}/`)}
           >
-            Edit this game
-          </Link>
-          <Link
-            href="/games"
-            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-          >
-            Back to games
-          </Link>
-          <div className="inline-block ml-2">
-            <Link
-              href={`/games/${game.id}`}
-              as="button"
-              method="delete"
-              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium"
-            >
-              Destroy this game
-            </Link>
-          </div>
+            Back to Club
+          </Button>
         </div>
       </div>
     </>

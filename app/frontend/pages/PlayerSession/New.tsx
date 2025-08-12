@@ -1,4 +1,6 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import Form from "./Form";
 import { PlayerSessionType } from "./types";
 import { PlayerType } from "../Player/types";
@@ -15,8 +17,14 @@ interface NewProps {
 }
 
 export default function New({ club, game, player_session, players }: NewProps) {
+  const [playerId, setPlayerId] = useState<number>(players[0]?.id || 0);
+  useEffect(() => {
+    setPlayerId(players[0]?.id || 0);
+  }, [players]);
+
   console.log("Show props:", { club, game, player_session, players });
-  let player_id = -1;
+  console.log("Show state:", { playerId });
+
   return (
     <>
       <Head title="New player session" />
@@ -24,11 +32,16 @@ export default function New({ club, game, player_session, players }: NewProps) {
       <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         <h1 className="font-bold text-4xl">New player session</h1>
         <h2 className="text-2xl mt-4">Choose a player</h2>
-        <ToggleGroup className="w-auto mt-4" type="single">
+        <ToggleGroup
+          className="w-auto mt-4"
+          value={String(playerId)}
+          type="single"
+        >
           {players.map((player) => (
             <ToggleGroupItem
-              onClick={() => (player_id = player.id)}
-              value={player.name}
+              onClick={() => setPlayerId(player.id)}
+              value={String(player.id)}
+              className="data-[state=on]:text-white data-[state=on]:bg-blue-500"
             >
               {player.name}
             </ToggleGroupItem>
@@ -40,19 +53,20 @@ export default function New({ club, game, player_session, players }: NewProps) {
           onSubmit={(form) => {
             form.transform((data) => ({
               player_session: data,
-              player_id: player_id,
+              player_id: playerId,
             }));
             form.post(`/clubs/${club.id}/games/${game.id}/player_sessions/`);
           }}
           submitText="Create Player Session"
         />
 
-        <Link
-          href="/player_sessions"
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+        <Button
+          variant={"secondary"}
+          className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
+          onClick={() => router.visit(`/clubs/${club.id}/games/${game.id}`)}
         >
-          Back to player sessions
-        </Link>
+          Back to Game
+        </Button>
       </div>
     </>
   );

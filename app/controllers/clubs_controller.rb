@@ -17,7 +17,7 @@ class ClubsController < ApplicationController
 
   # GET /clubs/1
   def show
-    @games = @club.games
+    @games = @club.games.order(created_at: :desc)
     @players = @club.players
     render inertia: 'Club/Show', props: {
       club: serialize_club(@club),

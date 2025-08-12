@@ -1,7 +1,8 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import Form from "./Form";
 import { GameType } from "./types";
 import { ClubType } from "../Club/types";
+import { Button } from "@/components/ui/button";
 
 interface NewProps {
   club: ClubType;
@@ -25,12 +26,13 @@ export default function New({ club, game }: NewProps) {
           submitText="Create Game"
         />
 
-        <Link
-          href="/games"
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+        <Button
+          variant={"secondary"}
+          className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
+          onClick={() => router.visit(`/clubs/${club.id}/`)}
         >
-          Back to games
-        </Link>
+          Back to Club
+        </Button>
       </div>
     </>
   );

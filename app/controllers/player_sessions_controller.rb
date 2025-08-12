@@ -53,11 +53,18 @@ class PlayerSessionsController < ApplicationController
         game_id: @game.id,
         player_id: @player.id
     ))
-
+    logger.info "Params: #{@player_session}"
     if @player_session.save
-      redirect_to club_game_path({club_id: @club.id, id: @game.id}), notice: "Player session was successfully created."
+
+      @players = @club.players.reject { |o| @game.player_sessions.pluck(:player_id).include?(o.id)}
+      # No more player sessions to add, go to game log
+      if @players.empty?
+        redirect_to club_game_path({club_id: @club.id, id: @game.id}), notice: "All player sessions added"
+      else
+        redirect_to new_club_game_player_session_path({club_id: @club.id, id: @game.id}), notice: "Player session was successfully created."
+      end
     else
-      redirect_to new_club_game_url, inertia: { errors: @player_session.errors }
+      redirect_to new_club_game_player_session_url, inertia: { errors: @player_session.errors }
     end
   end
 
