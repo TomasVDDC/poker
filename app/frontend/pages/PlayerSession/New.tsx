@@ -31,7 +31,17 @@ export default function New({ club, game, player_session, players }: NewProps) {
 
       <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         <h1 className="font-bold text-4xl">New player session</h1>
-        <h2 className="text-2xl mt-4">Choose a player</h2>
+        <div className="flex flex-row gap-4 items-center mt-6">
+          <h2 className="text-2xl mr-auto ">Choose a player</h2>
+          <Button
+            className="mr-2 bg-blue-600 hover:bg-blue-600 cursor-pointer"
+            onClick={() =>
+              router.visit(`/clubs/${club.id}/games/${game.id}/players/new`)
+            }
+          >
+            New Player
+          </Button>
+        </div>
         <ToggleGroup
           className="w-auto mt-4"
           value={String(playerId)}
