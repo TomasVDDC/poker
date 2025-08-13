@@ -57,7 +57,7 @@ export default function Form({
           id="winning"
           value={data.winnings}
           className="block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"
-          onChange={(e) => setData("winnings", parseInt(e.target.value))}
+          onChange={(e) => setData("winnings", parseFloat(e.target.value))}
         />
         {errors.winnings && (
           <div className="text-red-500 px-3 py-2 font-medium">
