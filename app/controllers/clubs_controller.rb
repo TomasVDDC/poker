@@ -97,7 +97,11 @@ class ClubsController < ApplicationController
     def serialize_game(game)
       game.as_json(only: [
         :id, :club_id
-      ]).merge( formatted_created_at: game.created_at.to_date.to_formatted_s(:long_ordinal),
+      ]).merge( pot: calculate_pot(game), formatted_created_at: game.created_at.to_date.to_formatted_s(:long_ordinal),
         formatted_buy_in: number_to_currency(game.buy_in))
+    end
+
+    def calculate_pot(game)
+      number_to_currency game.player_sessions.pluck(:winnings).sum
     end
 end

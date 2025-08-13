@@ -123,6 +123,13 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
     },
   },
   {
+    accessorKey: "pot",
+    header: () => <div className="text-xl text-right"> Pot </div>,
+    cell: ({ row }) => {
+      return <div className="text-right">{row.getValue("pot")}</div>;
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const game = row.original;

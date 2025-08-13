@@ -9,6 +9,7 @@ export interface GameType {
 export type GameListItemType = {
   id: number;
   club_id: number;
+  pot: number;
   formatted_buy_in: string;
   formatted_created_at: string;
 };
