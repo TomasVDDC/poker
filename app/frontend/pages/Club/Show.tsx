@@ -4,6 +4,7 @@ import { GameListItemType } from "../Game/types";
 import { PlayerType } from "../Player/types";
 import { Button } from "@/components/ui/button";
 import { GameTable } from "./components/GameTable";
+import { ChartLineMultiple } from "@/pages/Club/components/chart-line-multiple";
 
 interface ShowProps {
   club: ClubType;
@@ -32,6 +33,7 @@ export default function Show({ club, players, games, flash }: ShowProps) {
               {player.name} {player.net_profit}{" "}
             </div>
           ))}
+          <ChartLineMultiple />
 
           <div className="my-10">
             <div className="flex flex-row">
