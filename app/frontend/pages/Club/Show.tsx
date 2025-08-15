@@ -4,7 +4,6 @@ import { GameListItemType } from "../Game/types";
 import { PlayerType } from "../Player/types";
 import { Button } from "@/components/ui/button";
 import { GameTable } from "./components/GameTable";
-import { PlayerDropdownMenu } from "./components/PlayerDropdownMenu";
 
 interface ShowProps {
   club: ClubType;
@@ -26,17 +25,6 @@ export default function Show({ club, players, games, flash }: ShowProps) {
           )}
 
           <h1 className="font-bold text-4xl mb-9"> {club.name}</h1>
-          <h1 className="font-bold text-2xl my-2 mr-auto"> Players </h1>
-          <div className="flex flex-row">
-            <div className="flex flex-row gap-3">
-              {players.map((player) => (
-                <div className="flex items-center">
-                  <div>{player.name}</div>
-                  <PlayerDropdownMenu player={player} />
-                </div>
-              ))}
-            </div>
-          </div>
           <h1 className="font-bold text-2xl my-2 mr-auto"> Leaderboard </h1>
           {players.map((player) => (
             <div>

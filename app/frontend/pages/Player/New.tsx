@@ -6,11 +6,11 @@ import { GameType } from "../Game/types";
 
 interface NewProps {
   club: ClubType;
-  game: GameType;
   player: PlayerType;
+  redirect_to: String;
 }
 
-export default function New({ club, game, player }: NewProps) {
+export default function New({ club, player, redirect_to }: NewProps) {
   return (
     <>
       <Head title="New player" />
@@ -21,8 +21,11 @@ export default function New({ club, game, player }: NewProps) {
         <Form
           player={player}
           onSubmit={(form) => {
-            form.transform((data) => ({ player: data }));
-            form.post(`/clubs/${club.id}/games/${game.id}/players`);
+            form.transform((data) => ({
+              player: data,
+              redirect_to: redirect_to,
+            }));
+            form.post(`/clubs/${club.id}/players`);
           }}
           submitText="Create Player"
         />

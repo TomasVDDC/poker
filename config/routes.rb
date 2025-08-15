@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   # /clubs/:club_id/games/new
   # Allows us to access the club id directly from the url params. club id needed when creating a game
   resources :clubs do
+    resources :players
     resources :games do
       resources :player_sessions
-      resources :players
     end
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

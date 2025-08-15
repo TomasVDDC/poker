@@ -36,7 +36,9 @@ export default function New({ club, game, player_session, players }: NewProps) {
           <Button
             className="mr-2 bg-blue-600 hover:bg-blue-600 cursor-pointer"
             onClick={() =>
-              router.visit(`/clubs/${club.id}/games/${game.id}/players/new`)
+              router.visit(`/clubs/${club.id}/players/new`, {
+                data: { redirect_to: window.location.pathname },
+              })
             }
           >
             New Player

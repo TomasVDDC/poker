@@ -38,8 +38,12 @@ class ClubsController < ApplicationController
 
   # GET /clubs/1/edit
   def edit
+    @players = @club.players
     render inertia: 'Club/Edit', props: {
-      club: serialize_club(@club)
+      club: serialize_club(@club),
+      players: @players.map do |player|
+          serialize_player(player)
+      end
     }
   end
 
@@ -83,6 +87,12 @@ class ClubsController < ApplicationController
     def serialize_club(club)
       club.as_json(only: [
         :id, :name
+      ])
+    end
+
+    def serialize_player(player)
+      player.as_json(only: [
+        :id, :club_id, :name
       ])
     end
 

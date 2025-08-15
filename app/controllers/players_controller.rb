@@ -1,8 +1,6 @@
 class PlayersController < ApplicationController
   before_action :set_player, only: %i[ show edit update destroy ]
   before_action :set_club, only: %i[ new create update destroy]
-  before_action :set_game, only: %i[ new create ]
-
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -25,11 +23,13 @@ class PlayersController < ApplicationController
 
   # GET /players/new
   def new
+    logger.info "Params new #{params}"
     @player = Player.new
     render inertia: 'Player/New', props: {
       club: serialize_club(@club),
       game: serialize_game(@game),
-      player: serialize_player(@player)
+      player: serialize_player(@player),
+      redirect_to: params[:redirect_to]
     }
   end
 
@@ -42,10 +42,12 @@ class PlayersController < ApplicationController
 
   # POST /players
   def create
+    logger.info "Params create #{params}"
     @player = @club.players.build(player_params)
 
+
     if @player.save
-      redirect_to new_club_game_player_session_path({club_id: @club.id, id: @game.id}), notice: "Player was successfully created."
+      redirect_to params[:redirect_to], notice: "Player was successfully created."
     else
       redirect_to club_url, inertia: { errors: @player.errors }
     end
@@ -54,7 +56,7 @@ class PlayersController < ApplicationController
   # PATCH/PUT /players/1
   def update
     if @player.update(player_params)
-      redirect_to club_path(@club), notice: "Player was successfully updated."
+      redirect_to edit_club_path(@club), notice: "Player was successfully updated."
     else
       redirect_to edit_player_url(@player), inertia: { errors: @player.errors }
     end
@@ -63,7 +65,7 @@ class PlayersController < ApplicationController
   # DELETE /players/1
   def destroy
     @player.destroy!
-    redirect_to club_path(@club), notice: "Player was successfully destroyed."
+    redirect_to edit_club_path(@club), notice: "Player was successfully destroyed."
   end
 
   private
@@ -71,10 +73,6 @@ class PlayersController < ApplicationController
     def set_player
       @player = Player.find(params[:id])
     end
-
-    def set_game
-    @game = Game.find(params[:game_id])
-       end
 
     def set_club
       @club = Club.find(params[:club_id])
