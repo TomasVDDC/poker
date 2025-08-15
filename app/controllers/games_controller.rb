@@ -20,7 +20,9 @@ class GamesController < ApplicationController
     render inertia: 'Game/Show', props: {
       club: serialize_club(@club),
       game: serialize_game(@game),
-      player_sessions: serialize_and_transform_player_sessions(@player_sessions,@game.buy_in)     }
+      player_sessions: serialize_and_transform_player_sessions(@player_sessions,@game.buy_in),
+      conservation_of_currency:  serialize_conservation_of_currency(@player_sessions,@game.buy_in)
+    }
   end
 
   # GET /games/new
@@ -82,8 +84,8 @@ class GamesController < ApplicationController
 
     def serialize_game(game)
       game.as_json(only: [
-        :id, :club_id, :buy_in
-      ])
+        :id, :club_id
+      ]).merge(buy_in: number_to_currency(game.buy_in))
     end
 
     def serialize_club(club)
@@ -105,5 +107,16 @@ class GamesController < ApplicationController
 
       end
     end
+
+    def serialize_conservation_of_currency(player_sessions, buy_in)
+      equilibrium_of_currency = 0
+      player_sessions.map do |player_session|
+              net_profit_or_loss = player_session.winnings - (player_session.number_of_buy_ins * buy_in)
+              equilibrium_of_currency += net_profit_or_loss
+      end
+
+      equilibrium_of_currency.as_json
+    end
+
 
 end

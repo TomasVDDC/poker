@@ -9,6 +9,7 @@ interface ShowProps {
   club: ClubType;
   game: GameType;
   player_sessions: PlayerSessionListItemType[];
+  conservation_of_currency: string;
   flash: { notice?: string };
 }
 
@@ -16,9 +17,15 @@ export default function Show({
   club,
   game,
   player_sessions,
+  conservation_of_currency,
   flash,
 }: ShowProps) {
-  console.log("Show props:", { club, game, player_sessions });
+  console.log("Show props:", {
+    club,
+    game,
+    player_sessions,
+    conservation_of_currency,
+  });
   return (
     <>
       <Head title={`Game #${game.id}`} />
@@ -32,7 +39,7 @@ export default function Show({
           )}
 
           <h1 className="font-bold text-4xl">Game #{game.id}</h1>
-          <div> {game.buy_in} </div>
+          <div className="text-xl mt-2">Buy in: {game.buy_in}</div>
           <div className="my-10">
             <div className="flex flex-row">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
@@ -48,6 +55,12 @@ export default function Show({
               </Button>
             </div>
             <PlayerSessionTable player_sessions={player_sessions} />
+            {parseFloat(conservation_of_currency) != 0 && (
+              <div className="text-red-500 mt-3">
+                {`The sum of net profit/loss is not equal to 0. Double check your
+                input! (currently equal to ${Math.round(parseFloat(conservation_of_currency))})`}
+              </div>
+            )}
           </div>
           <Button
             className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
