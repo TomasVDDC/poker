@@ -20,10 +20,7 @@ class GamesController < ApplicationController
     render inertia: 'Game/Show', props: {
       club: serialize_club(@club),
       game: serialize_game(@game),
-      player_sessions: @player_sessions.map do |player_session|
-          serialize_player_session(player_session,@game.buy_in)
-      end
-    }
+      player_sessions: serialize_and_transform_player_sessions(@player_sessions,@game.buy_in)     }
   end
 
   # GET /games/new
@@ -95,14 +92,18 @@ class GamesController < ApplicationController
       ])
     end
 
-    def serialize_player_session(player_session,buy_in)
-      player_session.as_json(only: [
-        :id, :game_id, :number_of_buy_ins, :winnings
-      ]).merge( club_id: params[:club_id],player_name: player_session.player.name, formatted_created_at: player_session.created_at.to_date.to_formatted_s(:long_ordinal),
-        formatted_winnings: number_to_currency(player_session.winnings), net_profit_or_loss: number_to_currency(calculate_net_profit_or_loss(player_session,buy_in)))
+    def serialize_and_transform_player_sessions(player_sessions, buy_in)
+      # sort by net_profit_or_loss
+      player_sessions = player_sessions.sort_by { |a| a.winnings - (a.number_of_buy_ins * buy_in)}.reverse
 
+      player_sessions.map do |player_session|
+        net_profit_or_loss = player_session.winnings - (player_session.number_of_buy_ins * buy_in)
+        player_session.as_json(only: [
+               :id, :game_id, :number_of_buy_ins, :winnings
+             ]).merge( club_id: params[:club_id],player_name: player_session.player.name, formatted_created_at: player_session.created_at.to_date.to_formatted_s(:long_ordinal),
+               formatted_winnings: number_to_currency(player_session.winnings), net_profit_or_loss: number_to_currency(net_profit_or_loss) )
+
+      end
     end
-    def calculate_net_profit_or_loss(player_session,buy_in)
-      net_profit_or_loss = player_session.winnings - (player_session.number_of_buy_ins * buy_in)
-    end
+
 end
