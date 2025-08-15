@@ -24,9 +24,7 @@ class ClubsController < ApplicationController
       games: @games.map do |game|
           serialize_game(game)
       end,
-      players: @players.map do |player|
-          serialize_player(player)
-      end
+      players: serialize_and_transform_players(@players)
     }
   end
 
@@ -88,10 +86,26 @@ class ClubsController < ApplicationController
       ])
     end
 
-    def serialize_player(player)
-      player.as_json(only: [
-        :id, :club_id, :name
-      ])
+    def serialize_and_transform_players(players)
+      net_profit_over_all_games = Array.new
+      players.map do |player|
+        acc = 0
+        player.player_sessions.map do |player_session|
+         acc += player_session.winnings - ( player_session.number_of_buy_ins * player_session.game.buy_in )
+        end
+        net_profit_over_all_games << acc
+      end
+
+      logger.info "net profit over all games #{net_profit_over_all_games}"
+      players_sorted = players.zip(net_profit_over_all_games).sort_by { |_ , net_profit| net_profit }.reverse
+
+      # players = players.sort_by { |a| a.player_sessions.sum(:winnings) - ( a.player_sessions.sum(:number_of_buy_ins) * buy_in )}
+      logger.info "player_sorted by total_net_profit_or_loss #{players}"
+      players_sorted.map do |player, net_profit|
+        player.as_json(only: [
+          :id, :club_id, :name
+        ]).merge(net_profit: number_to_currency(net_profit))
+      end
     end
 
     def serialize_game(game)

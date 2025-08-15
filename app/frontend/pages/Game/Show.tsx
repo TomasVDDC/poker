@@ -32,7 +32,7 @@ export default function Show({
           )}
 
           <h1 className="font-bold text-4xl">Game #{game.id}</h1>
-
+          <div> {game.buy_in} </div>
           <div className="my-10">
             <div className="flex flex-row">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
@@ -49,7 +49,6 @@ export default function Show({
             </div>
             <PlayerSessionTable player_sessions={player_sessions} />
           </div>
-
           <Button
             className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
             variant={"secondary"}

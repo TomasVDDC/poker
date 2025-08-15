@@ -3,7 +3,7 @@ import { ClubType } from "./types";
 import { GameListItemType } from "../Game/types";
 import { PlayerType } from "../Player/types";
 import { Button } from "@/components/ui/button";
-import { GameTable, ColumnHeaders } from "./components/GameTable";
+import { GameTable } from "./components/GameTable";
 import { PlayerDropdownMenu } from "./components/PlayerDropdownMenu";
 
 interface ShowProps {
@@ -14,7 +14,7 @@ interface ShowProps {
 }
 
 export default function Show({ club, players, games, flash }: ShowProps) {
-  console.log("Show props:", { club, games, flash });
+  console.log("Show props:", { club, games, players, flash });
   return (
     <>
       <div className="mx-auto container">
@@ -28,12 +28,6 @@ export default function Show({ club, players, games, flash }: ShowProps) {
           <h1 className="font-bold text-4xl mb-9"> {club.name}</h1>
           <h1 className="font-bold text-2xl my-2 mr-auto"> Players </h1>
           <div className="flex flex-row">
-            {/*<Button
-              className="mr-2"
-              onClick={() => router.visit(`/clubs/${club.id}/players/new`)}
-            >
-              New Player
-              </Button>*/}
             <div className="flex flex-row gap-3">
               {players.map((player) => (
                 <div className="flex items-center">
@@ -43,6 +37,13 @@ export default function Show({ club, players, games, flash }: ShowProps) {
               ))}
             </div>
           </div>
+          <h1 className="font-bold text-2xl my-2 mr-auto"> Leaderboard </h1>
+          {players.map((player) => (
+            <div>
+              {" "}
+              {player.name} {player.net_profit}{" "}
+            </div>
+          ))}
 
           <div className="my-10">
             <div className="flex flex-row">
