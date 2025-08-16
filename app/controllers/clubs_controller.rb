@@ -24,7 +24,8 @@ class ClubsController < ApplicationController
       games: @games.map do |game|
           serialize_game(game)
       end,
-      players: serialize_and_transform_players(@players)
+      players: serialize_and_transform_players(@players),
+      chart_data: create_chart(@club)
     }
   end
 
@@ -128,4 +129,23 @@ class ClubsController < ApplicationController
     def calculate_pot(game)
       number_to_currency game.player_sessions.pluck(:winnings).sum
     end
+
+    def create_chart(club)
+      chart_data = []
+
+      club.games.each do |game|
+        data_point = {}
+        data_point["date"] = game.created_at.to_date.to_formatted_s(:long_ordinal),
+        game.player_sessions.each do |player_session|
+          net_winnings = player_session.winnings - (player_session.number_of_buy_ins * game.buy_in)
+          previous_winnings = chart_data.last&.[](player_session.player.name) || 0
+          data_point[player_session.player.name] =  previous_winnings + net_winnings
+        end
+
+        chart_data << data_point
+
+      end
+      return chart_data
+    end
+
 end

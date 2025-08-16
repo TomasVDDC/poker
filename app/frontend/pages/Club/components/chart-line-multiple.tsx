@@ -1,5 +1,5 @@
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, Legend, YAxis } from "recharts";
 
 import {
   Card,
@@ -15,23 +15,29 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { PlayerType } from "@/pages/Player/types";
 
-const chartData = [
-  {
-    month: "August 13th, 2025",
-    Charlie: "186",
-    Cancro: 32.85,
-  },
-  {
-    month: "August 17th, 2025",
-    Charlie: 305,
-    Cancro: 213,
-  },
-  {
-    month: "September 13th, 2025",
-    Charlie: -45,
-    Cancro: -10,
-  },
+// https://www.heavy.ai/blog/12-color-palettes-for-telling-better-stories-with-your-data
+// combination of retro metro and river nights color palettes
+const colors = [
+  "#ea5545",
+  "#f46a9b",
+  "#ef9b20",
+  "#edbf33",
+  "#ede15b",
+  "#bdcf32",
+  "#87bc45",
+  "#27aeef",
+  "#b33dc6",
+  "#b30000",
+  "#7c1158",
+  "#4421af",
+  "#1a53ff",
+  "#0d88e6",
+  "#00b7c7",
+  "#5ad45a",
+  "#8be04e",
+  "#ebdc78",
 ];
 // const chartData = [
 //   { month: "January", desktop: "186", mobile: "80" },
@@ -42,29 +48,26 @@ const chartData = [
 //   { month: "June", desktop: 214, mobile: 140 },
 // ];
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig;
+const chartConfig = {} satisfies ChartConfig;
 
-export function ChartLineMultiple() {
+export function ChartLineMultiple({
+  data,
+  players,
+}: {
+  data: any;
+  players: PlayerType[];
+}) {
   return (
     <Card>
-      <CardHeader>
+      {/*<CardHeader>
         <CardTitle>Line Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
-      </CardHeader>
+      </CardHeader>*/}
       <CardContent>
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -72,31 +75,28 @@ export function ChartLineMultiple() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               // tickFormatter={(value) => value.slice(0, 3)}
             />
+            <YAxis />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <Line
-              dataKey="Cancro"
-              type="monotone"
-              stroke="var(--color-desktop)"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              dataKey="Charlie"
-              type="monotone"
-              stroke="var(--color-mobile)"
-              strokeWidth={2}
-              dot={false}
-            />
+            {players.map((player, index) => (
+              <Line
+                connectNulls
+                dataKey={player.name}
+                type="monotone"
+                stroke={colors[index]}
+                strokeWidth={2}
+              />
+            ))}
+            <Legend />
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
+      {/*<CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 leading-none font-medium">
@@ -107,7 +107,7 @@ export function ChartLineMultiple() {
             </div>
           </div>
         </div>
-      </CardFooter>
+      </CardFooter>*/}
     </Card>
   );
 }

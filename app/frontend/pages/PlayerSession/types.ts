@@ -11,7 +11,7 @@ export type PlayerSessionListItemType = {
   game_id: number;
   player_name: string;
   number_of_buy_ins: number;
-  net_profit_or_loss: number;
+  net_profit_or_loss: string;
   formatted_winnings: number;
   formatted_created_at: string;
 };

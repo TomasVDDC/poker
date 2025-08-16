@@ -13,8 +13,14 @@ interface ShowProps {
   flash: { notice?: string };
 }
 
-export default function Show({ club, players, games, flash }: ShowProps) {
-  console.log("Show props:", { club, games, players, flash });
+export default function Show({
+  club,
+  players,
+  games,
+  chart_data,
+  flash,
+}: ShowProps) {
+  console.log("Show props:", { club, games, players, flash, chart_data });
   return (
     <>
       <div className="mx-auto container">
@@ -33,7 +39,8 @@ export default function Show({ club, players, games, flash }: ShowProps) {
               {player.name} {player.net_profit}{" "}
             </div>
           ))}
-          <ChartLineMultiple />
+
+          <ChartLineMultiple data={chart_data} players={players} />
 
           <div className="my-10">
             <div className="flex flex-row">
