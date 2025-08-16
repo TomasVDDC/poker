@@ -74,7 +74,7 @@ export default function New({ club, game, player_session, players }: NewProps) {
 
         <Button
           variant={"secondary"}
-          className="rounded-sm  ml-3 py-6 px-5 text-sm sm:text-md cursor-pointer"
+          className="rounded-sm  ml-3 py-6 px-5 text-sm sm:text-base cursor-pointer"
           onClick={() => router.visit(`/clubs/${club.id}/games/${game.id}`)}
         >
           Back to Game

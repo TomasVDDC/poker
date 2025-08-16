@@ -44,7 +44,7 @@ export default function Show({
             <div className="flex flex-row items-center mb-3">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
               <Button
-                className="my-2 text-xs sm:text-md cursor-pointer"
+                className="my-2 text-xs sm:text-base cursor-pointer"
                 onClick={() =>
                   router.visit(
                     `/clubs/${club.id}/games/${game.id}/player_sessions/new`,
@@ -56,14 +56,14 @@ export default function Show({
             </div>
             <PlayerSessionTable player_sessions={player_sessions} />
             {parseFloat(conservation_of_currency) != 0 && (
-              <div className="text-red-500 mt-4  text-xs sm:text-md">
+              <div className="text-red-500 mt-4  text-xs sm:text-base">
                 {`The sum of net profit/loss is not equal to 0. Double check your
                 input! (currently equal to ${Math.round(parseFloat(conservation_of_currency))})`}
               </div>
             )}
           </div>
           <Button
-            className="rounded-sm  py-6 px-5 sm:text-md cursor-pointer"
+            className="rounded-sm  py-6 px-5 sm:text-base cursor-pointer"
             variant={"secondary"}
             onClick={() => router.visit(`/clubs/${club.id}/`)}
           >

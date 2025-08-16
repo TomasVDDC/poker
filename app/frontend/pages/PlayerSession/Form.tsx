@@ -70,7 +70,7 @@ export default function Form({
         <button
           type="submit"
           disabled={processing}
-          className="rounded-lg py-3 px-5 bg-blue-600 text-white inline-block  text-sm sm:text-md cursor-pointer"
+          className="rounded-lg py-3 px-5 bg-blue-600 text-white inline-block  text-sm sm:text-base cursor-pointer"
         >
           {submitText}
         </button>

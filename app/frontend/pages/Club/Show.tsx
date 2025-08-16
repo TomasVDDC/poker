@@ -38,11 +38,13 @@ export default function Show({
           <h1 className="font-bold text-xl sm:text-2xl my-2 mr-auto">
             Leaderboard
           </h1>
-          {players.map((player) => (
-            <div className=" text-xs sm:text-md">
-              {player.name} {player.net_profit}
-            </div>
-          ))}
+          <div className="max-w-[200px] sm:max-w-[400px]">
+            {players.map((player) => (
+              <div className=" flex justify-between text-sm sm:text-base">
+                <span>{player.name}</span> <span>{player.net_profit}</span>
+              </div>
+            ))}
+          </div>
 
           <ChartLineMultiple data={chart_data} players={players} />
 
@@ -52,7 +54,7 @@ export default function Show({
                 Game Log
               </h1>
               <Button
-                className="my-2 sm:text-md text-sm"
+                className="my-2 sm:text-base text-sm"
                 onClick={() => router.visit(`/clubs/${club.id}/games/new`)}
               >
                 New Game
@@ -63,7 +65,7 @@ export default function Show({
 
           <Link
             href="/clubs"
-            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block sm:text-md text-sm"
+            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block sm:text-base text-sm"
           >
             Back to clubs
           </Link>
@@ -72,7 +74,7 @@ export default function Show({
               href={`/clubs/${club.id}`}
               as="button"
               method="delete"
-              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-md text-sm cursor-pointer"
+              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
             >
               Destroy this club
             </Link>
@@ -80,7 +82,7 @@ export default function Show({
               href={`/clubs/${club.id}/edit`}
               as="button"
               method="get"
-              className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-md text-sm cursor-pointer"
+              className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
             >
               Edit this club
             </Link>
