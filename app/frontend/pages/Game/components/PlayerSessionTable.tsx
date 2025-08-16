@@ -108,14 +108,14 @@ function DataTable<TData, TValue>({
 export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
   {
     accessorKey: "player_name",
-    header: () => <div className="text-xl text-right"> Name </div>,
+    header: () => <div className="sm:text-xl text-right"> Name </div>,
     cell: ({ row }) => {
       return <div className="text-right">{row.getValue("player_name")}</div>;
     },
   },
   {
     accessorKey: "formatted_winnings",
-    header: () => <div className="text-xl text-right"> Winnings </div>,
+    header: () => <div className="sm:text-xl text-right"> Winnings </div>,
     cell: ({ row }) => {
       return (
         <div className="text-right">{row.getValue("formatted_winnings")}</div>
@@ -124,7 +124,7 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
   },
   {
     accessorKey: "number_of_buy_ins",
-    header: () => <div className="text-xl text-right"> Number of Buy Ins </div>,
+    header: () => <div className="sm:text-xl text-right"> Buy Ins </div>,
     cell: ({ row }) => {
       return (
         <div className="text-right">{row.getValue("number_of_buy_ins")}</div>
@@ -133,7 +133,7 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
   },
   {
     accessorKey: "net_profit_or_loss",
-    header: () => <div className="text-xl text-right"> Net Profit/Loss </div>,
+    header: () => <div className="sm:text-xl text-right"> Net Profit</div>,
     cell: ({ row }) => {
       return (
         <div className="text-right">{row.getValue("net_profit_or_loss")}</div>

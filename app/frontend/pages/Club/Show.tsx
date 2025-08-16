@@ -23,7 +23,7 @@ export default function Show({
   console.log("Show props:", { club, games, players, flash, chart_data });
   return (
     <>
-      <div className="mx-auto container">
+      <div className="mx-auto container p-3">
         <div className="mx-auto">
           {flash.notice && (
             <p className="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block">
@@ -31,12 +31,16 @@ export default function Show({
             </p>
           )}
 
-          <h1 className="font-bold text-4xl mb-9"> {club.name}</h1>
-          <h1 className="font-bold text-2xl my-2 mr-auto"> Leaderboard </h1>
+          <h1 className="font-bold text-2xl sm:text-4xl sm:mb-9">
+            {" "}
+            {club.name}
+          </h1>
+          <h1 className="font-bold text-xl sm:text-2xl my-2 mr-auto">
+            Leaderboard
+          </h1>
           {players.map((player) => (
-            <div>
-              {" "}
-              {player.name} {player.net_profit}{" "}
+            <div className=" text-xs sm:text-md">
+              {player.name} {player.net_profit}
             </div>
           ))}
 
@@ -44,9 +48,11 @@ export default function Show({
 
           <div className="my-10">
             <div className="flex flex-row">
-              <h1 className="font-bold text-2xl mr-auto"> Game Log</h1>
+              <h1 className="font-bold text-xl sm:text-2xl mr-auto">
+                Game Log
+              </h1>
               <Button
-                className="my-2"
+                className="my-2 sm:text-md text-sm"
                 onClick={() => router.visit(`/clubs/${club.id}/games/new`)}
               >
                 New Game
@@ -57,7 +63,7 @@ export default function Show({
 
           <Link
             href="/clubs"
-            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block sm:text-md text-sm"
           >
             Back to clubs
           </Link>
@@ -66,7 +72,7 @@ export default function Show({
               href={`/clubs/${club.id}`}
               as="button"
               method="delete"
-              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium cursor-pointer"
+              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-md text-sm cursor-pointer"
             >
               Destroy this club
             </Link>
@@ -74,7 +80,7 @@ export default function Show({
               href={`/clubs/${club.id}/edit`}
               as="button"
               method="get"
-              className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium cursor-pointer"
+              className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-md text-sm cursor-pointer"
             >
               Edit this club
             </Link>

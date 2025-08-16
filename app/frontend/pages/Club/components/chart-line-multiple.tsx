@@ -58,12 +58,12 @@ export function ChartLineMultiple({
   players: PlayerType[];
 }) {
   return (
-    <Card>
+    <Card className="my-4">
       {/*<CardHeader>
         <CardTitle>Line Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>*/}
-      <CardContent>
+      <CardContent className="pl-0 pr-1 sm:px-6">
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer

@@ -106,7 +106,7 @@ function DataTable<TData, TValue>({
 export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   {
     accessorKey: "formatted_created_at",
-    header: () => <div className="text-xl text-right"> Date </div>,
+    header: () => <div className=" sm:text-xl text-right"> Date </div>,
     cell: ({ row }) => {
       return (
         <div className="text-right">{row.getValue("formatted_created_at")}</div>
@@ -115,7 +115,7 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   },
   {
     accessorKey: "formatted_buy_in",
-    header: () => <div className="text-xl text-right"> Buy In </div>,
+    header: () => <div className="sm:text-xl text-right"> Buy In </div>,
     cell: ({ row }) => {
       return (
         <div className="text-right">{row.getValue("formatted_buy_in")}</div>
@@ -124,7 +124,7 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   },
   {
     accessorKey: "pot",
-    header: () => <div className="text-xl text-right"> Pot </div>,
+    header: () => <div className="sm:text-xl text-right"> Pot </div>,
     cell: ({ row }) => {
       return <div className="text-right">{row.getValue("pot")}</div>;
     },

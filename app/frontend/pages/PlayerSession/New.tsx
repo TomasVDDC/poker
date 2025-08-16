@@ -45,7 +45,7 @@ export default function New({ club, game, player_session, players }: NewProps) {
           </Button>
         </div>
         <ToggleGroup
-          className="w-auto mt-4"
+          className="w-auto mt-4 flex flex-col sm:flex-row"
           value={String(playerId)}
           type="single"
         >
@@ -53,7 +53,7 @@ export default function New({ club, game, player_session, players }: NewProps) {
             <ToggleGroupItem
               onClick={() => setPlayerId(player.id)}
               value={String(player.id)}
-              className="data-[state=on]:text-white data-[state=on]:bg-blue-500"
+              className="data-[state=on]:text-white mr-auto sm:mr-0 data-[state=on]:bg-blue-500"
             >
               {player.name}
             </ToggleGroupItem>
@@ -74,7 +74,7 @@ export default function New({ club, game, player_session, players }: NewProps) {
 
         <Button
           variant={"secondary"}
-          className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
+          className="rounded-sm  ml-3 py-6 px-5 text-sm sm:text-md cursor-pointer"
           onClick={() => router.visit(`/clubs/${club.id}/games/${game.id}`)}
         >
           Back to Game

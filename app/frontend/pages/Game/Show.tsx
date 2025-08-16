@@ -30,7 +30,7 @@ export default function Show({
     <>
       <Head title={`Game #${game.id}`} />
 
-      <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
+      <div className="mx-auto md:w-2/3 w-full px-4 sm:px-8 pt-8">
         <div className="mx-auto">
           {flash.notice && (
             <p className="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block">
@@ -40,11 +40,11 @@ export default function Show({
 
           <h1 className="font-bold text-4xl">Game #{game.id}</h1>
           <div className="text-xl mt-2">Buy in: {game.buy_in}</div>
-          <div className="my-10">
-            <div className="flex flex-row">
+          <div className=" my-6 sm:my-10">
+            <div className="flex flex-row items-center mb-3">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
               <Button
-                className="my-2 cursor-pointer"
+                className="my-2 text-xs sm:text-md cursor-pointer"
                 onClick={() =>
                   router.visit(
                     `/clubs/${club.id}/games/${game.id}/player_sessions/new`,
@@ -56,14 +56,14 @@ export default function Show({
             </div>
             <PlayerSessionTable player_sessions={player_sessions} />
             {parseFloat(conservation_of_currency) != 0 && (
-              <div className="text-red-500 mt-3">
+              <div className="text-red-500 mt-4  text-xs sm:text-md">
                 {`The sum of net profit/loss is not equal to 0. Double check your
                 input! (currently equal to ${Math.round(parseFloat(conservation_of_currency))})`}
               </div>
             )}
           </div>
           <Button
-            className="rounded-sm ml-3 py-6 px-5 text-md cursor-pointer"
+            className="rounded-sm  py-6 px-5 sm:text-md cursor-pointer"
             variant={"secondary"}
             onClick={() => router.visit(`/clubs/${club.id}/`)}
           >
