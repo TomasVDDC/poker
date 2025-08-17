@@ -3,6 +3,7 @@ import { ClubType } from "./types";
 import { GameListItemType } from "../Game/types";
 import { PlayerType } from "../Player/types";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { GameTable } from "./components/GameTable";
 import { ChartLineMultiple } from "@/pages/Club/components/chart-line-multiple";
 
@@ -35,7 +36,37 @@ export default function Show({
             {" "}
             {club.name}
           </h1>
-          <h1 className="font-bold text-xl sm:text-2xl my-2 mr-auto">
+
+          <Card className="p-4 shadow-md rounded-2xl mt-4">
+            <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
+            <div className="divide-y divide-gray-200">
+              {players.map((player, index) => (
+                <div
+                  key={player.name}
+                  className="flex justify-between items-center py-2 text-sm sm:text-base"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold w-6 text-center">
+                      {index + 1}
+                    </span>
+                    <span className="truncate max-w-[120px] sm:max-w-[200px]">
+                      {player.name}
+                    </span>
+                  </div>
+                  <span
+                    className={`font-medium ${
+                      player.net_profit.includes("-")
+                        ? "text-red-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {player.net_profit}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Card>
+          {/*<h1 className="font-bold text-xl sm:text-2xl my-2 mr-auto">
             Leaderboard
           </h1>
           <div className="max-w-[200px] sm:max-w-[400px]">
@@ -44,7 +75,7 @@ export default function Show({
                 <span>{player.name}</span> <span>{player.net_profit}</span>
               </div>
             ))}
-          </div>
+          </div>*/}
 
           <ChartLineMultiple data={chart_data} players={players} />
 
