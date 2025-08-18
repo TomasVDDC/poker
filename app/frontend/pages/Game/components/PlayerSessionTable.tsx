@@ -32,11 +32,13 @@ import { router } from "@inertiajs/react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isReadOnly?: boolean;
 }
 
 function DataTable<TData, TValue>({
   columns,
   data,
+  isReadOnly,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -72,11 +74,15 @@ function DataTable<TData, TValue>({
               return (
                 <TableRow
                   className="cursor-pointer"
-                  onClick={() => {
-                    router.visit(
-                      `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/edit`,
-                    );
-                  }}
+                  onClick={
+                    isReadOnly
+                      ? undefined
+                      : () => {
+                          router.visit(
+                            `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/edit`,
+                          );
+                        }
+                  }
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
@@ -142,7 +148,7 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const player_session = row.original;
 
       return (
@@ -161,6 +167,7 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
                   `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/edit`,
                 )
               }
+              disabled={table.options.meta?.isReadOnly}
             >
               Edit
             </DropdownMenuItem>
@@ -170,6 +177,7 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
                   `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/`,
                 )
               }
+              disabled={table.options.meta?.isReadOnly}
             >
               Delete
             </DropdownMenuItem>
@@ -185,10 +193,15 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
 
 export function PlayerSessionTable(props: {
   player_sessions: PlayerSessionListItemType[];
+  isReadOnly?: boolean;
 }) {
   return (
     <div className="">
-      <DataTable columns={ColumnHeaders} data={props.player_sessions} />
+      <DataTable
+        columns={ColumnHeaders}
+        data={props.player_sessions}
+        isReadOnly={props.isReadOnly}
+      />
     </div>
   );
 }

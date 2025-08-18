@@ -59,7 +59,10 @@ export default function Show({
                 </Button>
               )}
             </div>
-            <PlayerSessionTable player_sessions={player_sessions} />
+            <PlayerSessionTable
+              player_sessions={player_sessions}
+              isReadOnly={read_only}
+            />
             {parseFloat(conservation_of_currency) != 0 && (
               <div className="text-red-500 mt-4  text-xs sm:text-base">
                 {`The sum of net profit/loss is not equal to 0. Double check your
