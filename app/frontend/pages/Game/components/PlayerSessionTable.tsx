@@ -44,6 +44,7 @@ function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta: { isReadOnly },
   });
 
   return (
