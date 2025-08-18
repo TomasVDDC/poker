@@ -11,6 +11,7 @@ interface ShowProps {
   club: ClubType;
   games: GameListItemType[];
   players: PlayerType[];
+  read_only: Boolean;
   flash: { notice?: string };
 }
 
@@ -19,9 +20,17 @@ export default function Show({
   players,
   games,
   chart_data,
+  read_only,
   flash,
 }: ShowProps) {
-  console.log("Show props:", { club, games, players, flash, chart_data });
+  console.log("Show props:", {
+    club,
+    games,
+    players,
+    chart_data,
+    read_only,
+    flash,
+  });
   return (
     <>
       <div className="mx-auto container p-3">
@@ -84,40 +93,47 @@ export default function Show({
               <h1 className="font-bold text-xl sm:text-2xl mr-auto">
                 Game Log
               </h1>
-              <Button
-                className="my-2 sm:text-base text-sm"
-                onClick={() => router.visit(`/clubs/${club.id}/games/new`)}
-              >
-                New Game
-              </Button>
+
+              {!read_only && (
+                <Button
+                  className="my-2 sm:text-base text-sm"
+                  onClick={() => router.visit(`/clubs/${club.id}/games/new`)}
+                >
+                  New Game
+                </Button>
+              )}
             </div>
             <GameTable games={games} />
           </div>
 
-          <Link
-            href="/clubs"
-            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block sm:text-base text-sm"
-          >
-            Back to clubs
-          </Link>
-          <div className="inline-block ml-2">
-            <Link
-              href={`/clubs/${club.id}`}
-              as="button"
-              method="delete"
-              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
-            >
-              Destroy this club
-            </Link>
-            <Link
-              href={`/clubs/${club.id}/edit`}
-              as="button"
-              method="get"
-              className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
-            >
-              Edit this club
-            </Link>
-          </div>
+          {!read_only && (
+            <>
+              <Link
+                href="/clubs"
+                className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block sm:text-base text-sm"
+              >
+                Back to clubs
+              </Link>
+              <div className="inline-block ml-2">
+                <Link
+                  href={`/clubs/${club.id}`}
+                  as="button"
+                  method="delete"
+                  className="mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
+                >
+                  Destroy this club
+                </Link>
+                <Link
+                  href={`/clubs/${club.id}/edit`}
+                  as="button"
+                  method="get"
+                  className="ml-2 mt-2 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
+                >
+                  Edit this club
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

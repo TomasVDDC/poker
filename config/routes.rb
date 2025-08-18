@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # /clubs/:club_id/games/new
-  # Allows us to access the club id directly from the url params. club id needed when creating a game
   resources :clubs do
     resources :players
     resources :games do
       resources :player_sessions
     end
   end
+  get "clubs/shared/:share_token" => "clubs#shared"
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -18,5 +17,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+   root "clubs#index"
 end

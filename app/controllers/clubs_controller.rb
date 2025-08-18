@@ -25,7 +25,8 @@ class ClubsController < ApplicationController
           serialize_game(game)
       end,
       players: serialize_and_transform_players(@players),
-      chart_data: create_chart(@club)
+      chart_data: create_chart(@club),
+      read_only: false
     }
   end
 
@@ -50,7 +51,8 @@ class ClubsController < ApplicationController
 
   # POST /clubs
   def create
-    @club = Club.new(club_params)
+    share_token = Random.hex(16)
+    @club = Club.new(club_params.merge(share_token: share_token))
 
     if @club.save
       redirect_to @club, notice: "Club was successfully created."
@@ -72,6 +74,23 @@ class ClubsController < ApplicationController
   def destroy
     @club.destroy!
     redirect_to clubs_url, notice: "Club was successfully destroyed."
+  end
+
+  def shared
+    logger.info "Club params: #{params}"
+    @club = Club.find_by!(share_token: params[:share_token])
+    @games = @club.games.order(created_at: :desc)
+    @players = @club.players
+    render inertia: 'Club/Show', props: {
+      club: serialize_club(@club),
+      games: @games.map do |game|
+          serialize_game(game)
+      end,
+      players: serialize_and_transform_players(@players),
+      chart_data: create_chart(@club),
+      read_only: true
+    }
+
   end
 
   private
