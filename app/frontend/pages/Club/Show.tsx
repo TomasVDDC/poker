@@ -3,6 +3,7 @@ import { ClubType } from "./types";
 import { GameListItemType } from "../Game/types";
 import { PlayerType } from "../Player/types";
 import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/ui/copy-button";
 import { Card } from "@/components/ui/card";
 import { GameTable } from "./components/GameTable";
 import { ChartLineMultiple } from "@/pages/Club/components/chart-line-multiple";
@@ -34,6 +35,8 @@ export default function Show({
     flash,
     assetsPath,
   });
+  const shareUrl = `https://${window.location.host}/clubs/shared/${club.share_token}`;
+
   return (
     <>
       <div className="mx-auto container p-3">
@@ -44,10 +47,13 @@ export default function Show({
             </p>
           )}
 
-          <h1 className="font-bold text-2xl sm:text-4xl sm:mb-9">
-            {" "}
-            {club.name}
-          </h1>
+          <div className="flex fley-row ">
+            <h1 className="font-bold text-2xl sm:text-4xl sm:mb-9">
+              {club.name}
+            </h1>
+            <span className="truncate text-gray-500">{shareUrl}</span>
+            <CopyButton content={shareUrl} />
+          </div>
 
           <Card className="p-4 shadow-md rounded-2xl mt-4">
             <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
