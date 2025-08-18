@@ -47,12 +47,14 @@ export default function Show({
             </p>
           )}
 
-          <div className="flex fley-row ">
-            <h1 className="font-bold text-2xl sm:text-4xl sm:mb-9">
-              {club.name}
-            </h1>
-            <span className="truncate text-gray-500">{shareUrl}</span>
-            <CopyButton content={shareUrl} />
+          <div className="flex sm:flex-row flex-col sm:gap-6 gap-2 sm:mb-9">
+            <h1 className="font-bold text-2xl sm:text-4xl ">{club.name}</h1>
+            <div className="flex items-center gap-2">
+              <span className="truncate p-1 w-60  border-stone-500 border-2 text-sm sm:text-base rounded-2xl text-gray-500">
+                {shareUrl}
+              </span>
+              <CopyButton content={shareUrl} />
+            </div>
           </div>
 
           <Card className="p-4 shadow-md rounded-2xl mt-4">
