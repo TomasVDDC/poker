@@ -1,4 +1,4 @@
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { ClubType } from "./types";
 import { GameListItemType } from "../Game/types";
 import { PlayerType } from "../Player/types";
@@ -23,6 +23,8 @@ export default function Show({
   read_only,
   flash,
 }: ShowProps) {
+  const assetsPath = usePage().props;
+
   console.log("Show props:", {
     club,
     games,
@@ -30,6 +32,7 @@ export default function Show({
     chart_data,
     read_only,
     flash,
+    assetsPath,
   });
   return (
     <>
@@ -75,16 +78,6 @@ export default function Show({
               ))}
             </div>
           </Card>
-          {/*<h1 className="font-bold text-xl sm:text-2xl my-2 mr-auto">
-            Leaderboard
-          </h1>
-          <div className="max-w-[200px] sm:max-w-[400px]">
-            {players.map((player) => (
-              <div className=" flex justify-between text-sm sm:text-base">
-                <span>{player.name}</span> <span>{player.net_profit}</span>
-              </div>
-            ))}
-          </div>*/}
 
           <ChartLineMultiple data={chart_data} players={players} />
 
@@ -103,7 +96,7 @@ export default function Show({
                 </Button>
               )}
             </div>
-            <GameTable games={games} />
+            <GameTable games={games} read_only={read_only} />
           </div>
 
           {!read_only && (

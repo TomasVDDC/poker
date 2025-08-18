@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[ show edit update destroy ]
+  before_action :set_game, only: %i[ show edit update destroy shared]
   before_action :set_club, only: %i[show new create update destroy]
 
   inertia_share flash: -> { flash.to_hash }
@@ -65,6 +65,17 @@ class GamesController < ApplicationController
   def destroy
     @game.destroy!
     redirect_to club_path(@club), notice: "Game was successfully destroyed."
+  end
+
+  def shared
+    @player_sessions = @game.player_sessions
+    render inertia: 'Game/Show', props: {
+      club: serialize_club(@club),
+      game: serialize_game(@game),
+      player_sessions: serialize_and_transform_player_sessions(@player_sessions,@game.buy_in),
+      conservation_of_currency:  serialize_conservation_of_currency(@player_sessions,@game.buy_in),
+      read_only: true
+    }
   end
 
   private

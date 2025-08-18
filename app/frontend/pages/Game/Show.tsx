@@ -10,6 +10,7 @@ interface ShowProps {
   game: GameType;
   player_sessions: PlayerSessionListItemType[];
   conservation_of_currency: string;
+  read_only?: boolean;
   flash: { notice?: string };
 }
 
@@ -18,6 +19,7 @@ export default function Show({
   game,
   player_sessions,
   conservation_of_currency,
+  read_only,
   flash,
 }: ShowProps) {
   console.log("Show props:", {
@@ -25,6 +27,7 @@ export default function Show({
     game,
     player_sessions,
     conservation_of_currency,
+    read_only,
   });
   return (
     <>
@@ -43,16 +46,18 @@ export default function Show({
           <div className=" my-6 sm:my-10">
             <div className="flex flex-row items-center mb-3">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>
-              <Button
-                className="my-2 text-xs sm:text-base cursor-pointer"
-                onClick={() =>
-                  router.visit(
-                    `/clubs/${club.id}/games/${game.id}/player_sessions/new`,
-                  )
-                }
-              >
-                New Player Session
-              </Button>
+              {!read_only && (
+                <Button
+                  className="my-2 text-xs sm:text-base cursor-pointer"
+                  onClick={() =>
+                    router.visit(
+                      `/clubs/${club.id}/games/${game.id}/player_sessions/new`,
+                    )
+                  }
+                >
+                  New Player Session
+                </Button>
+              )}
             </div>
             <PlayerSessionTable player_sessions={player_sessions} />
             {parseFloat(conservation_of_currency) != 0 && (
@@ -65,7 +70,14 @@ export default function Show({
           <Button
             className="rounded-sm  py-6 px-5 sm:text-base cursor-pointer"
             variant={"secondary"}
-            onClick={() => router.visit(`/clubs/${club.id}/`)}
+            onClick={
+              read_only
+                ? () =>
+                    router.visit(
+                      `/clubs/shared/${window.location.pathname.split("/")[3]}`,
+                    )
+                : () => router.visit(`/clubs/${club.id}/`)
+            }
           >
             Back to Club
           </Button>

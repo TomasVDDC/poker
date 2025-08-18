@@ -5,6 +5,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  RowData,
   useReactTable,
 } from "@tanstack/react-table";
 // shadcn implementation of a table component
@@ -29,19 +30,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { router } from "@inertiajs/react";
 
+declare module "@tanstack/table-core" {
+  interface TableMeta<TData extends RowData> {
+    isReadOnly: boolean | undefined;
+  }
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isReadOnly?: boolean;
 }
 
 function DataTable<TData, TValue>({
   columns,
   data,
+  isReadOnly = false,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta: { isReadOnly },
   });
 
   return (
@@ -73,7 +83,13 @@ function DataTable<TData, TValue>({
                 <TableRow
                   className="cursor-pointer"
                   onClick={() => {
-                    router.visit(`/clubs/${game.club_id}/games/${game.id}/`);
+                    isReadOnly
+                      ? router.visit(
+                          `/clubs/shared/${window.location.pathname.split("/").pop()}/games/${game.id}/`,
+                        )
+                      : router.visit(
+                          `/clubs/${game.club_id}/games/${game.id}/`,
+                        );
                   }}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -131,7 +147,8 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
+      console.log("table", table);
       const game = row.original;
 
       return (
@@ -148,6 +165,7 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
               onClick={() =>
                 router.visit(`/clubs/${game.club_id}/games/${game.id}/edit`)
               }
+              disabled={table.options.meta?.isReadOnly}
             >
               Edit
             </DropdownMenuItem>
@@ -155,6 +173,7 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
               onClick={() =>
                 router.delete(`/clubs/${game.club_id}/games/${game.id}`)
               }
+              disabled={table.options.meta?.isReadOnly}
             >
               Delete
             </DropdownMenuItem>
@@ -168,10 +187,17 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   },
 ];
 
-export function GameTable(props: { games: GameListItemType[] }) {
+export function GameTable(props: {
+  games: GameListItemType[];
+  read_only: boolean;
+}) {
   return (
     <div className="">
-      <DataTable columns={ColumnHeaders} data={props.games} />
+      <DataTable
+        columns={ColumnHeaders}
+        data={props.games}
+        isReadOnly={props.read_only}
+      />
     </div>
   );
 }
