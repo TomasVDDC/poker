@@ -74,16 +74,7 @@ function DataTable<TData, TValue>({
               const player_session = row.original;
               return (
                 <TableRow
-                  className="cursor-pointer"
-                  onClick={
-                    isReadOnly
-                      ? undefined
-                      : () => {
-                          router.visit(
-                            `/clubs/${player_session.club_id}/games/${player_session.game_id}/player_sessions/${player_session.id}/edit`,
-                          );
-                        }
-                  }
+                  className="cursor-pointer hover:cursor-default"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

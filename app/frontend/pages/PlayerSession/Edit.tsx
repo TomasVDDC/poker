@@ -30,16 +30,10 @@ export default function Edit({ club, player_session }: EditProps) {
         />
 
         <Link
-          href={`/player_sessions/${player_session.id}`}
+          href={`/clubs/${club.id}/games/${player_session.game_id}}`}
           className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
         >
-          Show this player session
-        </Link>
-        <Link
-          href="/player_sessions"
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-        >
-          Back to player sessions
+          Back to Game
         </Link>
       </div>
     </>
