@@ -1,8 +1,9 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import Form from "./Form";
 import { ClubType } from "./types";
 import { PlayerType } from "../Player/types";
 import { PlayerDropdownMenu } from "./components/PlayerDropdownMenu";
+import { Button } from "@/components/ui/button";
 
 interface EditProps {
   club: ClubType;
@@ -16,7 +17,13 @@ export default function Edit({ club, players }: EditProps) {
 
       <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         <h1 className="font-bold text-4xl">Editing club</h1>
-        <h1 className="font-bold text-2xl my-2 mr-auto"> Players </h1>
+        <div className="flex flex-row">
+          <h1 className="font-bold text-2xl my-2 mr-auto"> Players </h1>
+          <Button onClick={() => router.visit(`/clubs/${club.id}/players/new`)}>
+            New Player
+          </Button>
+        </div>
+
         <div className="flex flex-row">
           <div className="flex flex-row gap-3">
             {players.map((player) => (

@@ -1,9 +1,13 @@
-import { Head, Link } from '@inertiajs/react'
-import Form from './Form'
-import { ClubType } from './types'
+import { Head, Link, router } from "@inertiajs/react";
+import Form from "./Form";
+import { ClubType } from "./types";
+import { PlayerType } from "@/pages/Player/types";
+import { Button } from "@/components/ui/button";
+import { PlayerDropdownMenu } from "./components/PlayerDropdownMenu";
 
 interface NewProps {
-  club: ClubType
+  club: ClubType;
+  players: PlayerType[];
 }
 
 export default function New({ club }: NewProps) {
@@ -17,19 +21,19 @@ export default function New({ club }: NewProps) {
         <Form
           club={club}
           onSubmit={(form) => {
-            form.transform((data) => ({ club: data }))
-            form.post('/clubs')
+            form.transform((data) => ({ club: data }));
+            form.post("/clubs");
           }}
           submitText="Create Club"
         />
 
         <Link
-          href="/clubs"
+          href={`/clubs/${club.id}`}
           className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
         >
-          Back to clubs
+          Back to club
         </Link>
       </div>
     </>
-  )
+  );
 }

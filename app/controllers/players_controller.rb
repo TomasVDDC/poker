@@ -24,11 +24,15 @@ class PlayersController < ApplicationController
   # GET /players/new
   def new
     logger.info "Params new #{params}"
+    @players = @club.players
     @player = Player.new
     render inertia: 'Player/New', props: {
       club: serialize_club(@club),
       game: serialize_game(@game),
       player: serialize_player(@player),
+      players: @players.map do |player|
+        serialize_player(player)
+      end,
       redirect_to: params[:redirect_to]
     }
   end
@@ -45,11 +49,11 @@ class PlayersController < ApplicationController
     logger.info "Params create #{params}"
     @player = @club.players.build(player_params)
 
-
     if @player.save
-      redirect_to params[:redirect_to], notice: "Player was successfully created."
+      # redirect_to params[:redirect_to], notice: "Player was successfully created."
+      redirect_to new_club_player_path(@club, redirect_to: params[:redirect_to]), notice: "Player was successfully created."
     else
-      redirect_to club_url, inertia: { errors: @player.errors }
+      redirect_to new_club_player_path(@club, redirect_to: params[:redirect_to]), inertia: { errors: @player.errors }
     end
   end
 

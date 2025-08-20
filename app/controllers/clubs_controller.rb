@@ -34,7 +34,7 @@ class ClubsController < ApplicationController
   def new
     @club = Club.new
     render inertia: 'Club/New', props: {
-      club: serialize_club(@club)
+      club: serialize_club(@club),
     }
   end
 
@@ -55,7 +55,7 @@ class ClubsController < ApplicationController
     @club = Club.new(club_params.merge(share_token: share_token))
 
     if @club.save
-      redirect_to @club, notice: "Club was successfully created."
+      redirect_to new_club_player_path(@club), notice: "Club was successfully created."
     else
       redirect_to new_club_url, inertia: { errors: @club.errors }
     end
