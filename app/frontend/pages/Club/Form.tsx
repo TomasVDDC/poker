@@ -27,7 +27,7 @@ interface FormProps {
 export default function Form({ club, onSubmit, submitText }: FormProps) {
   const form = useForm<ClubFormType>({
     name: club.name,
-    currency: club.currency,
+    currency: club.currency ?? "$",
   });
   const { data, setData, errors, processing } = form;
 

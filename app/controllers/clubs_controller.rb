@@ -106,7 +106,7 @@ class ClubsController < ApplicationController
 
     def serialize_club(club)
       club.as_json(only: [
-        :id, :name, :share_token
+        :id, :name, :share_token, :currency
       ])
     end
 
