@@ -42,7 +42,7 @@ export default function Show({
           )}
 
           <h1 className="font-bold text-4xl">Game #{game.id}</h1>
-          <div className="text-xl mt-2">Buy in: {game.buy_in}</div>
+          <div className="text-xl mt-2">Buy in: {game.formatted_buy_in}</div>
           <div className=" my-6 sm:my-10">
             <div className="flex flex-row items-center mb-3">
               <h1 className="font-bold text-2xl mr-auto"> Player Sessions</h1>

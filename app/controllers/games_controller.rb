@@ -54,10 +54,11 @@ class GamesController < ApplicationController
 
   # PATCH/PUT /games/1
   def update
+    logger.info "Game Params: #{game_params}"
     if @game.update(game_params)
       redirect_to club_path(@club), notice: "Game was successfully updated."
     else
-      redirect_to edit_game_url(@game), inertia: { errors: @game.errors }
+      redirect_to club_path(@club), inertia: { errors: @game.errors }
     end
   end
 
@@ -90,13 +91,13 @@ class GamesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def game_params
-      params.require(:game).permit(:buy_in)
+      params.require(:game).permit(:buy_in, :date)
     end
 
     def serialize_game(game)
       game.as_json(only: [
-        :id, :club_id
-      ]).merge(buy_in: number_to_currency(game.buy_in, :unit => game.club&.currency))
+        :id, :club_id, :date, :buy_in
+      ]).merge(formatted_buy_in: number_to_currency(game.buy_in, :unit => game.club&.currency))
     end
 
     def serialize_club(club)

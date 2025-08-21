@@ -121,12 +121,10 @@ function DataTable<TData, TValue>({
 
 export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
   {
-    accessorKey: "formatted_created_at",
+    accessorKey: "date",
     header: () => <div className=" sm:text-xl text-right"> Date </div>,
     cell: ({ row }) => {
-      return (
-        <div className="text-right">{row.getValue("formatted_created_at")}</div>
-      );
+      return <div className="text-right">{row.getValue("date")}</div>;
     },
   },
   {

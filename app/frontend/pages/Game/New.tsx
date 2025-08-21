@@ -20,6 +20,7 @@ export default function New({ club, game }: NewProps) {
         <Form
           game={game}
           onSubmit={(form) => {
+            console.log("form", form);
             form.transform((data) => ({ game: data }));
             form.post(`/clubs/${club.id}/games`);
           }}

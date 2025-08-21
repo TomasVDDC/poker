@@ -140,8 +140,8 @@ class ClubsController < ApplicationController
 
     def serialize_game(game)
       game.as_json(only: [
-        :id, :club_id
-      ]).merge( pot: calculate_pot(game), formatted_created_at: game.created_at.to_date.to_formatted_s(:long_ordinal),
+        :id, :club_id, :date
+      ]).merge(pot: calculate_pot(game),
         formatted_buy_in: number_to_currency(game.buy_in, :unit => game.club.currency))
     end
 
