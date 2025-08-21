@@ -96,7 +96,7 @@ class GamesController < ApplicationController
     def serialize_game(game)
       game.as_json(only: [
         :id, :club_id
-      ]).merge(buy_in: number_to_currency(game.buy_in, :unit => game.club.currency))
+      ]).merge(buy_in: number_to_currency(game.buy_in, :unit => game.club&.currency))
     end
 
     def serialize_club(club)
