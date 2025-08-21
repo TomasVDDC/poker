@@ -101,7 +101,7 @@ class ClubsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def club_params
-      params.require(:club).permit(:name)
+      params.require(:club).permit(:name,:currency)
     end
 
     def serialize_club(club)
@@ -134,7 +134,7 @@ class ClubsController < ApplicationController
       players_sorted.map do |player, net_profit|
         player.as_json(only: [
           :id, :club_id, :name
-        ]).merge(net_profit: number_to_currency(net_profit))
+        ]).merge(net_profit: number_to_currency(net_profit, :unit => player.club.currency))
       end
     end
 
@@ -142,11 +142,11 @@ class ClubsController < ApplicationController
       game.as_json(only: [
         :id, :club_id
       ]).merge( pot: calculate_pot(game), formatted_created_at: game.created_at.to_date.to_formatted_s(:long_ordinal),
-        formatted_buy_in: number_to_currency(game.buy_in))
+        formatted_buy_in: number_to_currency(game.buy_in, :unit => game.club.currency))
     end
 
     def calculate_pot(game)
-      number_to_currency game.player_sessions.pluck(:winnings).sum
+      number_to_currency(game.player_sessions.pluck(:winnings).sum, :unit => game.club.currency)
     end
 
     def create_chart(club)

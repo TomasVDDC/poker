@@ -1,6 +1,13 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { Fragment } from "react";
 import { ClubType } from "./types";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 interface IndexProps {
   clubs: ClubType[];
@@ -27,18 +34,24 @@ export default function Index({ clubs, flash }: IndexProps) {
           </Link>
         </div>
 
-        <div className="min-w-full">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">
           {clubs.map((club) => (
             <Fragment key={club.id}>
-              <div> {club.name} </div>
-              <p>
-                <Link
-                  href={`/clubs/${club.id}`}
-                  className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-                >
-                  Show this club
-                </Link>
-              </p>
+              <Card
+                onClick={() => router.visit(`/clubs/${club.id}`)}
+                className="shadow-md hover:shadow-lg transition rounded-2xl"
+              >
+                <CardHeader>
+                  <CardTitle className="text-xl font-semibold">
+                    {club.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-500">
+                    Discover more about this club.
+                  </p>
+                </CardContent>
+              </Card>
             </Fragment>
           ))}
         </div>

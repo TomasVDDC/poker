@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_17_164922) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_21_111333) do
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "share_token"
+    t.string "currency", null: false
     t.index ["share_token"], name: "index_clubs_on_share_token", unique: true
   end
 
