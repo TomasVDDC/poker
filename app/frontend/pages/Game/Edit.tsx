@@ -1,6 +1,7 @@
 import { Head, Link } from "@inertiajs/react";
 import Form from "./Form";
 import { GameType } from "./types";
+import { format } from "date-fns";
 
 interface EditProps {
   game: GameType;
@@ -17,7 +18,9 @@ export default function Edit({ game }: EditProps) {
         <Form
           game={game}
           onSubmit={(form) => {
-            form.transform((data) => ({ game: data }));
+            form.transform((data) => ({
+              game: { buy_in: data.buy_in, date: format(data.date, "PPP") },
+            }));
             form.patch(`/clubs/${game.club_id}/games/${game.id}`);
           }}
           submitText="Update Game"

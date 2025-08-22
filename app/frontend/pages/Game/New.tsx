@@ -3,6 +3,7 @@ import Form from "./Form";
 import { GameType } from "./types";
 import { ClubType } from "../Club/types";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 
 interface NewProps {
   club: ClubType;
@@ -20,8 +21,10 @@ export default function New({ club, game }: NewProps) {
         <Form
           game={game}
           onSubmit={(form) => {
+            form.transform((data) => ({
+              game: { buy_in: data.buy_in, date: format(data.date, "PPP") },
+            }));
             console.log("form", form);
-            form.transform((data) => ({ game: data }));
             form.post(`/clubs/${club.id}/games`);
           }}
           submitText="Create Game"

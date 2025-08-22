@@ -16,4 +16,7 @@ export type GameListItemType = {
   date: string;
 };
 
-export type GameFormType = Omit<GameType, "id" | "club_id">;
+export type GameFormType = Omit<
+  GameType,
+  "id" | "club_id" | "formatted_buy_in"
+>;

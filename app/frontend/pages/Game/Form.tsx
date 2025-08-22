@@ -1,7 +1,7 @@
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
-import { format } from "date-fns";
 import { GameFormType, GameType } from "./types";
+import { parse } from "date-fns";
 import {
   MiniCalendar,
   MiniCalendarDay,
@@ -22,7 +22,7 @@ interface FormProps {
 export default function Form({ game, onSubmit, submitText }: FormProps) {
   const form = useForm<GameFormType>({
     buy_in: game.buy_in,
-    date: game.date,
+    date: game.date ? parse(game.date, "PPP", new Date()) : new Date(),
   });
   const { data, setData, errors, processing } = form;
 
@@ -50,9 +50,9 @@ export default function Form({ game, onSubmit, submitText }: FormProps) {
         )}
         <label htmlFor="date">Date</label>
         <MiniCalendar
+          value={data.date}
           onValueChange={(e) => {
-            console.log("helloe", e?.toDateString());
-            setData("date", format(e, "PPP"));
+            setData("date", e);
           }}
         >
           <MiniCalendarNavigation direction="prev" />
