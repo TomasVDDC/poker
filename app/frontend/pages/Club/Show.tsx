@@ -49,15 +49,17 @@ export default function Show({
 
           <div className="flex sm:flex-row flex-col sm:gap-6 gap-2 sm:mb-9">
             <h1 className="font-bold text-2xl sm:text-4xl ">{club.name}</h1>
-            <div className="flex items-center gap-2">
-              <span className="truncate p-1 w-60  border-stone-500 border-2 text-sm sm:text-base rounded-2xl text-gray-500">
-                {shareUrl}
-              </span>
-              <CopyButton content={shareUrl} />
-            </div>
+            {!read_only && (
+              <div className="flex items-center gap-2">
+                <span className="truncate p-1 w-60  border-stone-500 border-2 text-sm sm:text-base rounded-2xl text-gray-500">
+                  {shareUrl}
+                </span>
+                <CopyButton content={shareUrl} />
+              </div>
+            )}
           </div>
 
-          <Card className="p-4 shadow-md rounded-2xl mt-4">
+          <Card className="p-4 shadow-md rounded-2xl my-5">
             <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
             <div className="divide-y divide-gray-200">
               {players.map((player, index) => (
@@ -89,8 +91,8 @@ export default function Show({
 
           <ChartLineMultiple data={chart_data} players={players} />
 
-          <div className="my-10">
-            <div className="flex flex-row">
+          <div className="my-4">
+            <div className="flex flex-row items-center mb-3">
               <h1 className="font-bold text-xl sm:text-2xl mr-auto">
                 Game Log
               </h1>
