@@ -1,5 +1,12 @@
 # README
 
+## Resources
+- [Inertia.js](https://inertia-rails.dev/guide/)
+### Frontend
+- [shadcn](https://ui.shadcn.com/)
+- [shadcn more components](https://www.shadcn.io/)
+- [recharts](https://recharts.org/en-US)
+
 This README would normally document whatever steps are necessary to get the
 application up and running
 
