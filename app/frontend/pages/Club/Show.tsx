@@ -48,7 +48,11 @@ export default function Show({
           )}
 
           <div className="flex sm:flex-row flex-col sm:gap-6 gap-2 sm:mb-9">
-            <h1 className="font-bold text-2xl sm:text-4xl ">{club.name}</h1>
+            <div className="flex flex-row gap-2 items-center">
+              <img src="/icon.svg" className="w-9 h-9" alt="Logo" />
+              <h1 className="font-bold text-2xl sm:text-4xl ">{club.name}</h1>
+            </div>
+
             {!read_only && (
               <div className="flex items-center gap-2">
                 <span className="truncate p-1 w-60  border-stone-500 border-2 text-sm sm:text-base rounded-2xl text-gray-500">
