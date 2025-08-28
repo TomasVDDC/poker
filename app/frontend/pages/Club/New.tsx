@@ -1,9 +1,7 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import Form from "./Form";
 import { ClubType } from "./types";
 import { PlayerType } from "@/pages/Player/types";
-import { Button } from "@/components/ui/button";
-import { PlayerDropdownMenu } from "./components/PlayerDropdownMenu";
 
 interface NewProps {
   club: ClubType;

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pages/home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resources :clubs do
@@ -19,5 +20,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-   root "clubs#index"
+   root "pages#home"
 end
