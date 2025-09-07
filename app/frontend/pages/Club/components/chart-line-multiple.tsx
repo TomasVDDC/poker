@@ -94,7 +94,6 @@ export function ChartLineMultiple({
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <ReferenceLine
               y={0}
-              label="Max"
               stroke="red"
               strokeWidth={2}
               strokeDasharray="3 3"
