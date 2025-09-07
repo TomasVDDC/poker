@@ -8,6 +8,7 @@ import {
   YAxis,
   ReferenceLine,
   LabelList,
+  ResponsiveContainer,
 } from "recharts";
 
 import {
@@ -72,73 +73,75 @@ export function ChartLineMultiple({
         <CardTitle>Line Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>*/}
-      <CardContent className="pl-0 pr-1 sm:px-6">
-        <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={data}
-            margin={{
-              top: 12,
-              left: 12,
-              right: 60,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
-            <YAxis />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <ReferenceLine
-              y={0}
-              stroke="red"
-              strokeWidth={2}
-              strokeDasharray="3 3"
-            />
-            {players.map((player, player_index) => (
-              <Line
-                connectNulls
-                dataKey={player.name}
-                type="step"
-                stroke={colors[player_index]}
+      <CardContent className="pl-0 pr-1 sm:px-6 h-[450px]">
+        <ChartContainer config={chartConfig} className="w-full h-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              accessibilityLayer
+              data={data}
+              margin={{
+                top: 12,
+                left: 12,
+                right: 60,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <YAxis />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <ReferenceLine
+                y={0}
+                stroke="red"
                 strokeWidth={2}
-              >
-                <LabelList
+                strokeDasharray="3 3"
+              />
+              {players.map((player, player_index) => (
+                <Line
+                  connectNulls
                   dataKey={player.name}
-                  position="right"
-                  content={({ x, y, index }) => {
-                    // // Only render for the last point
-                    const isLast = index === data.length - 1;
-                    if (!isLast) return null;
-                    if (!(player.name in data[index])) return null;
-                    // if (
-                    //   (players.length > 6 && index > players.length - 2) ||
-                    //   index < 2
-                    // ) {
-                    //   return null;
-                    // }
-                    return (
-                      <text
-                        x={Number(x) + 6}
-                        y={Number(y) - 6}
-                        fontSize={10}
-                        fill={colors[player_index]}
-                        fontWeight="bold"
-                        textAnchor="start"
-                        dominantBaseline="middle"
-                      >
-                        {player.name}
-                      </text>
-                    );
-                  }}
-                />
-              </Line>
-            ))}
-            <Legend />
-          </LineChart>
+                  type="step"
+                  stroke={colors[player_index]}
+                  strokeWidth={2}
+                >
+                  <LabelList
+                    dataKey={player.name}
+                    position="right"
+                    content={({ x, y, index }) => {
+                      // // Only render for the last point
+                      const isLast = index === data.length - 1;
+                      if (!isLast) return null;
+                      if (!(player.name in data[index])) return null;
+                      // if (
+                      //   (players.length > 6 && index > players.length - 2) ||
+                      //   index < 2
+                      // ) {
+                      //   return null;
+                      // }
+                      return (
+                        <text
+                          x={Number(x) + 6}
+                          y={Number(y) - 6}
+                          fontSize={10}
+                          fill={colors[player_index]}
+                          fontWeight="bold"
+                          textAnchor="start"
+                          dominantBaseline="middle"
+                        >
+                          {player.name}
+                        </text>
+                      );
+                    }}
+                  />
+                </Line>
+              ))}
+              <Legend />
+            </LineChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
       {/*<CardFooter>
