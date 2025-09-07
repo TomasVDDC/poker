@@ -154,7 +154,7 @@ class ClubsController < ApplicationController
 
       club.games.each do |game|
         data_point = {}
-        data_point["date"] = game.created_at.to_date.to_formatted_s(:long_ordinal),
+        data_point["date"] = game.date
         game.player_sessions.each do |player_session|
           net_winnings = player_session.winnings - (player_session.number_of_buy_ins * game.buy_in)
           previous_winnings = chart_data.last&.[](player_session.player.name) || 0
