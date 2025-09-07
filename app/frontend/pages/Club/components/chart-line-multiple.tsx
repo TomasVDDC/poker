@@ -78,8 +78,9 @@ export function ChartLineMultiple({
             accessibilityLayer
             data={data}
             margin={{
+              top: 12,
               left: 12,
-              right: 80,
+              right: 60,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -124,7 +125,7 @@ export function ChartLineMultiple({
                       <text
                         x={Number(x) + 6}
                         y={Number(y) - 6}
-                        fontSize={12}
+                        fontSize={10}
                         fill={colors[player_index]}
                         fontWeight="bold"
                         textAnchor="start"
