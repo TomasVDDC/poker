@@ -34,14 +34,14 @@ export default function New({ club, players, player, redirect_to }: NewProps) {
           player={player}
           onSubmit={(form) => {
             form.transform((data) => ({
-              player: data,
+              // trim() removes whitespace from both sides of the string
+              player: { name: data.name.trim() },
               redirect_to: redirect_to,
             }));
             form.post(`/clubs/${club.id}/players`);
             // reset the form, not sure why form.reset() is not working
             form.setData({
-              club_id: club.id,
-              name: " ",
+              name: player.name,
             });
           }}
           submitText="Create Player"

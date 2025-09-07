@@ -17,7 +17,7 @@ export default function Edit({ player }: EditProps) {
         <Form
           player={player}
           onSubmit={(form) => {
-            form.transform((data) => ({ player: data }));
+            form.transform((data) => ({ player: { name: data.name.trim() } }));
             form.patch(`/clubs/${player.club_id}/players/${player.id}`);
           }}
           submitText="Update Player"

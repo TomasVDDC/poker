@@ -5,4 +5,4 @@ export interface PlayerType {
   net_profit?: string;
 }
 
-export type PlayerFormType = Omit<PlayerType, "id">;
+export type PlayerFormType = Omit<PlayerType, "id" | "net_profit" | "club_id">;
