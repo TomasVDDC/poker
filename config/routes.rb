@@ -10,9 +10,12 @@ Rails.application.routes.draw do
       resources :player_sessions
     end
   end
+
+
+  # Unauthenticated routes
   get "clubs/shared/:share_token" => "clubs#shared"
   get "clubs/shared/:share_token/games/:id" => "games#shared"
-  # get "clubs/shared/:share_token" => "clubs#shared"
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -22,5 +25,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-   root "pages#home"
+  root "pages#home"
 end

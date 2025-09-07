@@ -1,8 +1,8 @@
 include ActionView::Helpers::NumberHelper
 
 class ClubsController < ApplicationController
+  allow_unauthenticated_access only: %i[ shared ]
   before_action :set_club, only: %i[ show edit update destroy ]
-
   inertia_share flash: -> { flash.to_hash }
 
   # GET /clubs

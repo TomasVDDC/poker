@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  allow_unauthenticated_access only: %i[ shared ]
   before_action :set_game, only: %i[ show edit update destroy shared]
   before_action :set_club, only: %i[show new create update destroy]
 
