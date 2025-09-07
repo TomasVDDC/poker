@@ -87,7 +87,7 @@ export function ChartLineMultiple({
               <Line
                 connectNulls
                 dataKey={player.name}
-                type="monotone"
+                type="step"
                 stroke={colors[index]}
                 strokeWidth={2}
               />
