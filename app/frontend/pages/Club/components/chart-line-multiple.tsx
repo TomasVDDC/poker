@@ -1,5 +1,14 @@
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis, Legend, YAxis } from "recharts";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  XAxis,
+  Legend,
+  YAxis,
+  ReferenceLine,
+  LabelList,
+} from "recharts";
 
 import {
   Card,
@@ -70,7 +79,7 @@ export function ChartLineMultiple({
             data={data}
             margin={{
               left: 12,
-              right: 12,
+              right: 80,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -79,18 +88,54 @@ export function ChartLineMultiple({
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              // tickFormatter={(value) => value.slice(0, 3)}
             />
             <YAxis />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            {players.map((player, index) => (
+            <ReferenceLine
+              y={0}
+              label="Max"
+              stroke="red"
+              strokeWidth={2}
+              strokeDasharray="3 3"
+            />
+            {players.map((player, player_index) => (
               <Line
                 connectNulls
                 dataKey={player.name}
                 type="step"
-                stroke={colors[index]}
+                stroke={colors[player_index]}
                 strokeWidth={2}
-              />
+              >
+                <LabelList
+                  dataKey={player.name}
+                  position="right"
+                  content={({ x, y, index }) => {
+                    // // Only render for the last point
+                    const isLast = index === data.length - 1;
+                    if (!isLast) return null;
+                    if (!(player.name in data[index])) return null;
+                    // if (
+                    //   (players.length > 6 && index > players.length - 2) ||
+                    //   index < 2
+                    // ) {
+                    //   return null;
+                    // }
+                    return (
+                      <text
+                        x={Number(x) + 6}
+                        y={Number(y) - 6}
+                        fontSize={12}
+                        fill={colors[player_index]}
+                        fontWeight="bold"
+                        textAnchor="start"
+                        dominantBaseline="middle"
+                      >
+                        {player.name}
+                      </text>
+                    );
+                  }}
+                />
+              </Line>
             ))}
             <Legend />
           </LineChart>
