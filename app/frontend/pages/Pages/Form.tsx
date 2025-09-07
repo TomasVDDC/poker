@@ -1,22 +1,39 @@
 import { useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 // Temporary fix for InertiaFormProps not being exported from @inertiajs/react
 type InertiaFormProps<TForm extends Record<string, any>> = ReturnType<
   typeof useForm<TForm>
 >;
 
+interface UserType {
+  id: number;
+  email_address: string;
+  password: string;
+}
+
+type UserFormType = Omit<UserType, "id">;
+
 interface FormProps {
-  onSubmit: (form: InertiaFormProps<ClubFormType>) => void;
+  onSubmit: (form: InertiaFormProps<UserFormType>) => void;
   submitText: string;
 }
-export default function Form() {
+export default function Form({ onSubmit, submitText }: FormProps) {
+  const form = useForm<UserFormType>();
+  const { data, setData, errors, processing } = form;
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit(form);
+  };
   return (
-    <form className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <input
           type="email"
           placeholder="Email address"
           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+          onChange={(e) => setData("email_address", e.target.value)}
         />
       </div>
 
@@ -25,6 +42,7 @@ export default function Form() {
           type="password"
           placeholder="Password"
           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+          onChange={(e) => setData("password", e.target.value)}
         />
       </div>
 

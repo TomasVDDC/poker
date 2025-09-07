@@ -9,7 +9,14 @@ export default function Home() {
             <p className="text-gray-300">Track your home games for free</p>
           </div>
 
-          <Form />
+          <Form
+            onSubmit={(form) => {
+              form.transform((data) => ({ user: data }));
+              form.post("/users");
+            }}
+            submitText="Create User"
+          />
+
           <div className="mt-6 text-center">
             <a
               href="#"
