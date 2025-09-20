@@ -35,6 +35,11 @@ export default function Form({ onSubmit, submitText }: FormProps) {
           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
           onChange={(e) => setData("email_address", e.target.value)}
         />
+        {errors.email_address && (
+          <div className="text-red-500 px-3 py-2 font-medium">
+            {errors.email_address}
+          </div>
+        )}
       </div>
 
       <div>
@@ -44,13 +49,18 @@ export default function Form({ onSubmit, submitText }: FormProps) {
           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
           onChange={(e) => setData("password", e.target.value)}
         />
+        {errors.password && (
+          <div className="text-red-500 px-3 py-2 font-medium">
+            {errors.password}
+          </div>
+        )}
       </div>
 
       <button
         type="submit"
         className="w-full py-3 px-4 bg-gradient-to-r from-slate-600 to-blue-600 text-white font-semibold rounded-lg hover:from-slate-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all transform hover:scale-[1.02]"
       >
-        Sign In
+        {submitText}
       </button>
     </form>
   );

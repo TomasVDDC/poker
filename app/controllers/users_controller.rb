@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   # POST /users
   def create
     logger.info "Params create #{params}"
-    @user = User.create!(user_params)
+    @user = User.new(user_params)
 
     if @user.save
       redirect_to clubs_path(), notice: "User was successfully created."
