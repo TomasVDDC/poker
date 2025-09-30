@@ -1,12 +1,14 @@
 import { Head, Link } from "@inertiajs/react";
 import Form from "./Form";
 import { PlayerType } from "./types";
+import { ClubType } from "../Club/types";
 
 interface EditProps {
   player: PlayerType;
+  club: ClubType;
 }
 
-export default function Edit({ player }: EditProps) {
+export default function Edit({ player, club }: EditProps) {
   return (
     <>
       <Head title="Editing player" />
@@ -24,16 +26,10 @@ export default function Edit({ player }: EditProps) {
         />
 
         <Link
-          href={`/players/${player.id}`}
+          href={`/clubs/${club.id}/`}
           className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
         >
-          Show this player
-        </Link>
-        <Link
-          href="/players"
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-        >
-          Back to players
+          Back to club
         </Link>
       </div>
     </>

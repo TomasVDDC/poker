@@ -81,8 +81,11 @@ export default function Show({
             <div className="divide-y divide-gray-200">
               {players.map((player, index) => (
                 <div
+                  onClick={() =>
+                    router.get(`/clubs/${club.id}/players/${player.id}`)
+                  }
                   key={player.name}
-                  className="flex justify-between items-center py-2 text-sm sm:text-base"
+                  className="flex justify-between cursor-pointer items-center py-2 text-sm sm:text-base"
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold w-6 text-center">
@@ -151,8 +154,7 @@ export default function Show({
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
+                        delete this club and remove your data from our servers.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

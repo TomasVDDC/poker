@@ -1,13 +1,13 @@
 class PlayersController < ApplicationController
   before_action :set_player, only: %i[ show edit update destroy ]
-  before_action :set_club, only: %i[ new create update destroy]
+  before_action :set_club, only: %i[ new show edit create update destroy]
 
   inertia_share flash: -> { flash.to_hash }
 
   # GET /players
   def index
     @players = Player.all
-    render inertia: 'Player/Index', props: {
+    render inertia: "Player/Index", props: {
       players: @players.map do |player|
         serialize_player(player)
       end
@@ -16,8 +16,9 @@ class PlayersController < ApplicationController
 
   # GET /players/1
   def show
-    render inertia: 'Player/Show', props: {
-      player: serialize_player(@player)
+    render inertia: "Player/Show", props: {
+      player: serialize_player(@player),
+      club: serialize_club(@club)
     }
   end
 
@@ -26,7 +27,7 @@ class PlayersController < ApplicationController
     logger.info "Params new #{params}"
     @players = @club.players
     @player = Player.new
-    render inertia: 'Player/New', props: {
+    render inertia: "Player/New", props: {
       club: serialize_club(@club),
       game: serialize_game(@game),
       player: serialize_player(@player),
@@ -39,8 +40,9 @@ class PlayersController < ApplicationController
 
   # GET /players/1/edit
   def edit
-    render inertia: 'Player/Edit', props: {
-      player: serialize_player(@player)
+    render inertia: "Player/Edit", props: {
+      player: serialize_player(@player),
+      club: serialize_club(@club)
     }
   end
 
@@ -60,7 +62,7 @@ class PlayersController < ApplicationController
   # PATCH/PUT /players/1
   def update
     if @player.update(player_params)
-      redirect_to edit_club_path(@club), notice: "Player was successfully updated."
+      redirect_to club_path(@club), notice: "Player was successfully updated."
     else
       redirect_to edit_player_url(@player), inertia: { errors: @player.errors }
     end
@@ -69,7 +71,7 @@ class PlayersController < ApplicationController
   # DELETE /players/1
   def destroy
     @player.destroy!
-    redirect_to edit_club_path(@club), notice: "Player was successfully destroyed."
+    redirect_to club_path(@club), notice: "Player was successfully destroyed."
   end
 
   private
@@ -89,7 +91,7 @@ class PlayersController < ApplicationController
 
     def serialize_player(player)
       player.as_json(only: [
-        :id,:club_id, :name
+        :id, :club_id, :name
       ])
     end
 

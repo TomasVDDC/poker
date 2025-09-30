@@ -1,13 +1,27 @@
-import { Head, Link } from '@inertiajs/react'
-import Player from './Player'
-import { PlayerType } from './types'
+import { Head, Link, router } from "@inertiajs/react";
+import Player from "./Player";
+import { PlayerType } from "./types";
+import { ClubType } from "../Club/types";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ShowProps {
-  player: PlayerType
-  flash: { notice?: string }
+  player: PlayerType;
+  club: ClubType;
+  flash: { notice?: string };
 }
 
-export default function Show({ player, flash }: ShowProps) {
+export default function Show({ player, club, flash }: ShowProps) {
   return (
     <>
       <Head title={`Player #${player.id}`} />
@@ -24,30 +38,50 @@ export default function Show({ player, flash }: ShowProps) {
 
           <Player player={player} />
 
-          <Link
-            href={`/players/${player.id}/edit`}
-            className="mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+          <Button
+            onClick={() => router.get(`/clubs/${club.id}`)}
+            className="mt-2 text-gray-700 hover:bg-gray-100 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
+          >
+            Back to club
+          </Button>
+          <Button
+            onClick={() =>
+              router.get(`/clubs/${club.id}/players/${player.id}/edit`)
+            }
+            className="ml-2 mt-2 text-gray-700 hover:bg-gray-100 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
           >
             Edit this player
-          </Link>
-          <Link
-            href="/players"
-            className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
-          >
-            Back to players
-          </Link>
+          </Button>
           <div className="inline-block ml-2">
-            <Link
-              href={`/players/${player.id}`}
-              as="button"
-              method="delete"
-              className="mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium"
-            >
-              Destroy this player
-            </Link>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="mt-2 text-gray-700 hover:bg-gray-100 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer">
+                  Destroy this player
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the player and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() =>
+                      router.delete(`/clubs/${club.id}/players/${player.id}`)
+                    }
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>{" "}
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
