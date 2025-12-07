@@ -151,14 +151,15 @@ class ClubsController < ApplicationController
 
     def create_chart(club)
       chart_data = []
+      cumulative = Hash.new(0)
 
       club.games.each do |game|
         data_point = {}
         data_point["date"] = game.date
         game.player_sessions.each do |player_session|
           net_winnings = player_session.winnings - (player_session.number_of_buy_ins * game.buy_in)
-          previous_winnings = chart_data.last&.[](player_session.player.name) || 0
-          data_point[player_session.player.name] =  previous_winnings + net_winnings
+          cumulative[player_session.player.name] += net_winnings
+          data_point[player_session.player.name] = cumulative[player_session.player.name]
         end
 
         chart_data << data_point
