@@ -1,11 +1,10 @@
-import { Head, Link } from '@inertiajs/react'
-import { Fragment } from 'react'
-import Player from './Player'
-import { PlayerType } from './types'
+import { Head, Link } from "@inertiajs/react";
+import { Fragment } from "react";
+import { PlayerType } from "./types";
 
 interface IndexProps {
-  players: PlayerType[]
-  flash: { notice?: string }
+  players: PlayerType[];
+  flash: { notice?: string };
 }
 
 export default function Index({ players, flash }: IndexProps) {
@@ -45,5 +44,5 @@ export default function Index({ players, flash }: IndexProps) {
         </div>
       </div>
     </>
-  )
+  );
 }

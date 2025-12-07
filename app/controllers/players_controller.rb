@@ -18,6 +18,7 @@ class PlayersController < ApplicationController
   def show
     render inertia: "Player/Show", props: {
       chart_data: create_chart(@player),
+      stats: create_stats(@player),
       player: serialize_player(@player),
       club: serialize_club(@club)
     }
@@ -127,6 +128,17 @@ class PlayersController < ApplicationController
       end
       return chart_data
     end
+
+    def create_stats(player)
+      stats = {}
+      stats["number_of_games"] = player.player_sessions.length
+      stats["biggest_win"] = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.max
+      stats["biggest_loss"] = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.min
+      logger.info "[PLAYER] bigges win #{stats["biggest_loss"]}"
+      return stats
+
+    end
+
 
 
 

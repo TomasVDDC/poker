@@ -1,5 +1,4 @@
 import { Head, Link, router } from "@inertiajs/react";
-import Player from "./Player";
 import { PlayerType } from "./types";
 import { ClubType } from "../Club/types";
 import { Button } from "@/components/ui/button";
@@ -31,11 +30,18 @@ interface ShowProps {
 //   { date: "June", Emilio: 214 },
 // ];
 
-export default function Show({ player, club, chart_data, flash }: ShowProps) {
+export default function Show({
+  player,
+  club,
+  chart_data,
+  stats,
+  flash,
+}: ShowProps) {
   console.log("Show props:", {
     club,
     player,
     chart_data,
+    stats,
     flash,
   });
 
@@ -51,9 +57,13 @@ export default function Show({ player, club, chart_data, flash }: ShowProps) {
             </p>
           )}
 
-          <h1 className="font-bold text-4xl">Player #{player.id}</h1>
+          <h1 className="font-bold text-4xl">{player.name}</h1>
 
-          <Player player={player} />
+          <div className="mt-5">
+            <p>Number of games played: {stats.number_of_games}</p>
+            <p>Biggest win: {stats.biggest_win}</p>
+            <p>Biggest loss: {stats.biggest_loss}</p>
+          </div>
 
           <Chart data={chart_data} players={[player]} />
 
