@@ -116,7 +116,7 @@ class GamesController < ApplicationController
         player_session.as_json(only: [
                :id, :game_id, :number_of_buy_ins, :winnings
              ]).merge( club_id: params[:club_id],player_name: player_session.player.name, formatted_created_at: player_session.created_at.to_date.to_formatted_s(:long_ordinal),
-               formatted_winnings: number_to_currency(player_session.winnings), net_profit_or_loss: number_to_currency(net_profit_or_loss, :unit => player_session.game.club.currency) )
+               formatted_winnings: number_to_currency(player_session.winnings, :unit => player_session.game.club.currency ), net_profit_or_loss: number_to_currency(net_profit_or_loss, :unit => player_session.game.club.currency) )
 
       end
     end
