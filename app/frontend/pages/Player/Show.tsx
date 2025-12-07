@@ -3,6 +3,7 @@ import Player from "./Player";
 import { PlayerType } from "./types";
 import { ClubType } from "../Club/types";
 import { Button } from "@/components/ui/button";
+import { Chart } from "@/pages/Player/components/chart";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +22,23 @@ interface ShowProps {
   flash: { notice?: string };
 }
 
-export default function Show({ player, club, flash }: ShowProps) {
+// const chart_data = [
+//   { date: "January", Emilio: 186 },
+//   { date: "February", Emilio: 305 },
+//   { date: "March", Emilio: 237 },
+//   { date: "April", Emilio: 73 },
+//   { date: "May", Emilio: 209 },
+//   { date: "June", Emilio: 214 },
+// ];
+
+export default function Show({ player, club, chart_data, flash }: ShowProps) {
+  console.log("Show props:", {
+    club,
+    player,
+    chart_data,
+    flash,
+  });
+
   return (
     <>
       <Head title={`Player #${player.id}`} />
@@ -37,6 +54,8 @@ export default function Show({ player, club, flash }: ShowProps) {
           <h1 className="font-bold text-4xl">Player #{player.id}</h1>
 
           <Player player={player} />
+
+          <Chart data={chart_data} players={[player]} />
 
           <Button
             onClick={() => router.get(`/clubs/${club.id}`)}

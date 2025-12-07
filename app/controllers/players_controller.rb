@@ -17,6 +17,7 @@ class PlayersController < ApplicationController
   # GET /players/1
   def show
     render inertia: "Player/Show", props: {
+      chart_data: create_chart(@player),
       player: serialize_player(@player),
       club: serialize_club(@club)
     }
@@ -106,4 +107,27 @@ class PlayersController < ApplicationController
         :id
       ])
     end
+
+    def create_chart(player)
+      chart_data = []
+      winnings = 0
+
+      player.player_sessions.each do |player_session|
+        # logger.info "[PLAYER] game: #{player_session.game.date}"
+        # logger.info "[PLAYER] winnings: #{winnings}"
+        #
+        data_point = {}
+        data_point["date"] = player_session.game.date
+
+        winnings += player_session.winnings - (player_session.number_of_buy_ins * player_session.game.buy_in)
+
+        data_point[player_session.player.name] = winnings
+        chart_data << data_point
+
+      end
+      return chart_data
+    end
+
+
+
 end

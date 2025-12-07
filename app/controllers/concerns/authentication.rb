@@ -10,6 +10,9 @@ module Authentication
     def allow_unauthenticated_access(**options)
       skip_before_action :require_authentication, **options
     end
+    def is_authenticated
+      logger.info "is the user authenticated: #{:authenticated?}"
+    end
   end
 
   private
