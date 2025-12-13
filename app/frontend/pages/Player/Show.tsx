@@ -73,7 +73,7 @@ export default function Show({
           >
             Back to club
           </Button>
-          <Button
+          {/*<Button
             onClick={() =>
               router.get(`/clubs/${club.id}/players/${player.id}/edit`)
             }
@@ -108,7 +108,7 @@ export default function Show({
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>{" "}
-          </div>
+          </div>*/}
         </div>
       </div>
     </>
