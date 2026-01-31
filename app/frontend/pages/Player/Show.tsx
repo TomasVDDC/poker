@@ -2,6 +2,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import { PlayerType } from "./types";
 import { ClubType } from "../Club/types";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Chart } from "@/pages/Player/components/chart";
 import {
   AlertDialog,
@@ -59,12 +60,33 @@ export default function Show({
 
           <h1 className="font-bold text-4xl">{player.name}</h1>
 
-          <div className="mt-5">
-            <p>Number of games played: {stats.number_of_games}</p>
-            <p>Biggest win: {stats.biggest_win}</p>
-            <p>Biggest loss: {stats.biggest_loss}</p>
-          </div>
+          <h2 className="mt-8 mb-3 font-semibold text-lg text-muted-foreground">
+            Statistics
+          </h2>
+          <Card className="shadow-sm rounded-xl">
+            <CardContent className="flex flex-wrap justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <p className="text-muted-foreground text-sm">Games Played</p>
+                <p className="text-xl font-bold">{stats.number_of_games}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-muted-foreground text-sm">Biggest Win</p>
+                <p className="text-xl font-bold text-green-600">
+                  {stats.biggest_win}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-muted-foreground text-sm">Biggest Loss</p>
+                <p className="text-xl font-bold text-red-600">
+                  {stats.biggest_loss}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
+          <h2 className="mt-8 mb-3 font-semibold text-lg text-muted-foreground">
+            Win/Loss History
+          </h2>
           <Chart data={chart_data} players={[player]} />
 
           <Button

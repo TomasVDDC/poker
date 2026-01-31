@@ -1,3 +1,5 @@
+include ActionView::Helpers::NumberHelper
+
 class PlayersController < ApplicationController
   before_action :set_player, only: %i[ show edit update destroy ]
   before_action :set_club, only: %i[ new show edit create update destroy]
@@ -132,11 +134,11 @@ class PlayersController < ApplicationController
     def create_stats(player)
       stats = {}
       stats["number_of_games"] = player.player_sessions.length
-      stats["biggest_win"] = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.max
-      stats["biggest_loss"] = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.min
-      logger.info "[PLAYER] bigges win #{stats["biggest_loss"]}"
+      biggest_win = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.max
+      biggest_loss = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.min
+      stats["biggest_win"] = number_to_currency(biggest_win, :unit => player.club.currency)
+      stats["biggest_loss"] = number_to_currency(biggest_loss, :unit => player.club.currency)
       return stats
-
     end
 
 
