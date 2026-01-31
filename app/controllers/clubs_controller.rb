@@ -134,7 +134,10 @@ class ClubsController < ApplicationController
       players_sorted.map do |player, net_profit|
         player.as_json(only: [
           :id, :club_id, :name
-        ]).merge(net_profit: number_to_currency(net_profit, :unit => player.club.currency))
+        ]).merge(
+          net_profit: number_to_currency(net_profit, :unit => player.club.currency),
+          winning_streak: calculate_winning_streak(player)
+        )
       end
     end
 
@@ -166,6 +169,21 @@ class ClubsController < ApplicationController
 
       end
       return chart_data
+    end
+
+    def calculate_winning_streak(player)
+      sessions = player.player_sessions.includes(:game).to_a.sort { |a, b| Date.parse(b.game.date) <=> Date.parse(a.game.date) }
+      logger.info "Calculating winning streak for player: #{player.name}"
+
+      streak = 0
+      sessions.each do |session|
+        profit = session.winnings - (session.number_of_buy_ins * session.game.buy_in)
+        logger.info "Session date: #{session.game.date}, profit: #{profit}"
+        break if profit <= 0
+        streak += 1
+      end
+      logger.info "Final streak for #{player.name}: #{streak}"
+      streak
     end
 
 end

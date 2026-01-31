@@ -94,6 +94,11 @@ export default function Show({
                     <span className="truncate max-w-[120px] sm:max-w-[200px]">
                       {player.name}
                     </span>
+                    {player.winning_streak > 0 && (
+                      <span className="inline-flex items-center px-1 py-0.5 rounded border border-orange-300 bg-orange-50 text-xs">
+                        {player.winning_streak}🔥
+                      </span>
+                    )}
                   </div>
                   <span
                     className={`font-medium ${
