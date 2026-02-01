@@ -61,6 +61,12 @@ const colors = [
 const chartConfig = {} satisfies ChartConfig;
 
 export function Chart({ data, players, currency }: { data: any; players: PlayerType[]; currency: string }) {
+  const maxAbsValue = Math.max(
+    ...data.flatMap((point: any) =>
+      players.map((player) => Math.abs(point[player.name] ?? 0))
+    )
+  );
+
   return (
     <Card className="my-4">
       {/*<CardHeader>
@@ -74,7 +80,7 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
               accessibilityLayer
               data={data}
               margin={{
-                top: 12,
+                top: 30,
                 left: 12,
                 right: 60,
               }}
@@ -86,7 +92,7 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
                 axisLine={false}
                 tickMargin={8}
               />
-              <YAxis />
+              <YAxis domain={[-maxAbsValue, maxAbsValue]} />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <ReferenceLine
                 y={0}
