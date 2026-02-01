@@ -123,7 +123,7 @@ export default function Show({
           {/* Stats section */}
           <div className="my-5 grid grid-cols-3 gap-3 text-center">
             <div className="bg-blue-50 rounded-lg p-3 flex flex-col justify-center">
-              <div className="text-xs text-blue-600 font-medium">Money in Play</div>
+              <div className="text-xs text-blue-600 font-medium">Money Won</div>
               <div className="text-sm font-bold text-blue-700">{money_in_play}</div>
             </div>
             {biggest_win && (
