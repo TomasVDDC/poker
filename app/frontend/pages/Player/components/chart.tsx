@@ -134,7 +134,7 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
                           textAnchor="middle"
                           dominantBaseline="middle"
                         >
-                          {delta > 0 ? "+" : "-"}{currency}{Math.abs(delta)}
+                          {delta > 0 ? "+" : "-"}{currency}{Math.abs(delta).toFixed(2)}
                         </text>
                       );
                     }}
