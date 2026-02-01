@@ -26,6 +26,8 @@ interface ShowProps {
   read_only: boolean;
   flash: { notice?: string };
   money_in_play: string;
+  biggest_win: { player_name: string; amount: string } | null;
+  biggest_loss: { player_name: string; amount: string } | null;
 }
 
 export default function Show({
@@ -36,6 +38,8 @@ export default function Show({
   read_only,
   flash,
   money_in_play,
+  biggest_win,
+  biggest_loss,
 }: ShowProps) {
   const assetsPath = usePage().props;
 
@@ -79,12 +83,7 @@ export default function Show({
 
           {/* Player Leaderboard */}
           <Card className="p-4 shadow-md rounded-2xl my-5">
-            <div className="flex items-center justify-between mb-2">
-              <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-medium">
-                {money_in_play} in play
-              </span>
-            </div>
+            <h1 className="font-bold text-xl sm:text-2xl mb-2">Leaderboard</h1>
             <div className="divide-y divide-gray-200">
               {players.map((player, index) => (
                 <div
@@ -120,6 +119,28 @@ export default function Show({
               ))}
             </div>
           </Card>
+
+          {/* Stats section */}
+          <div className="my-5 grid grid-cols-3 gap-3 text-center">
+            <div className="bg-blue-50 rounded-lg p-3 flex flex-col justify-center">
+              <div className="text-xs text-blue-600 font-medium">Money in Play</div>
+              <div className="text-sm font-bold text-blue-700">{money_in_play}</div>
+            </div>
+            {biggest_win && (
+              <div className="bg-green-50 rounded-lg p-3">
+                <div className="text-xs text-green-600 font-medium">Biggest Win</div>
+                <div className="text-sm font-bold text-green-700">{biggest_win.amount}</div>
+                <div className="text-xs text-green-600">{biggest_win.player_name}</div>
+              </div>
+            )}
+            {biggest_loss && (
+              <div className="bg-red-50 rounded-lg p-3">
+                <div className="text-xs text-red-600 font-medium">Biggest Loss</div>
+                <div className="text-sm font-bold text-red-700">{biggest_loss.amount}</div>
+                <div className="text-xs text-red-600">{biggest_loss.player_name}</div>
+              </div>
+            )}
+          </div>
 
           {/* Chart of players net profit over time */}
           <ChartLineMultiple data={chart_data} players={players} />

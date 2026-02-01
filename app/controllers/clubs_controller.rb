@@ -28,7 +28,9 @@ class ClubsController < ApplicationController
       players: serialize_and_transform_players(@players),
       chart_data: create_chart(@club),
       read_only: false,
-      money_in_play: number_to_currency(money_in_play, unit: @club.currency)
+      money_in_play: number_to_currency(money_in_play, unit: @club.currency),
+      biggest_win: calculate_biggest_session_win(@club),
+      biggest_loss: calculate_biggest_session_loss(@club)
     }
   end
 
@@ -83,6 +85,7 @@ class ClubsController < ApplicationController
     @club = Club.find_by!(share_token: params[:share_token])
     @games = @club.games.order(created_at: :desc)
     @players = @club.players
+    money_in_play = calculate_money_in_play(@players)
     render inertia: 'Club/Show', props: {
       club: serialize_club(@club),
       games: @games.map do |game|
@@ -90,9 +93,11 @@ class ClubsController < ApplicationController
       end,
       players: serialize_and_transform_players(@players),
       chart_data: create_chart(@club),
-      read_only: true
+      read_only: true,
+      money_in_play: number_to_currency(money_in_play, unit: @club.currency),
+      biggest_win: calculate_biggest_session_win(@club),
+      biggest_loss: calculate_biggest_session_loss(@club)
     }
-
   end
 
   private
@@ -195,6 +200,30 @@ class ClubsController < ApplicationController
       end
       logger.info "Final streak for #{player.name}: #{streak}"
       streak
+    end
+
+    def calculate_biggest_session_win(club)
+      best_session = club.games
+        .includes(player_sessions: [:player, :game])
+        .flat_map(&:player_sessions)
+        .max_by { |ps| ps.winnings - (ps.number_of_buy_ins * ps.game.buy_in) }
+
+      return nil unless best_session
+      profit = best_session.winnings - (best_session.number_of_buy_ins * best_session.game.buy_in)
+      return nil if profit <= 0
+      { player_name: best_session.player.name, amount: number_to_currency(profit, unit: club.currency) }
+    end
+
+    def calculate_biggest_session_loss(club)
+      worst_session = club.games
+        .includes(player_sessions: [:player, :game])
+        .flat_map(&:player_sessions)
+        .min_by { |ps| ps.winnings - (ps.number_of_buy_ins * ps.game.buy_in) }
+
+      return nil unless worst_session
+      loss = worst_session.winnings - (worst_session.number_of_buy_ins * worst_session.game.buy_in)
+      return nil if loss >= 0
+      { player_name: worst_session.player.name, amount: number_to_currency(loss, unit: club.currency) }
     end
 
 end
