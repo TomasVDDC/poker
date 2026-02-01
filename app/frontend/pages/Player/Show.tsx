@@ -87,7 +87,7 @@ export default function Show({
           <h2 className="mt-8 mb-3 font-semibold text-lg text-muted-foreground">
             Win/Loss History
           </h2>
-          <Chart data={chart_data} players={[player]} />
+          <Chart data={chart_data} players={[player]} currency={club.currency} />
 
           <Button
             onClick={() => router.get(`/clubs/${club.id}`)}

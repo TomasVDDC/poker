@@ -60,7 +60,7 @@ const colors = [
 
 const chartConfig = {} satisfies ChartConfig;
 
-export function Chart({ data, players }: { data: any; players: PlayerType[] }) {
+export function Chart({ data, players, currency }: { data: any; players: PlayerType[]; currency: string }) {
   return (
     <Card className="my-4">
       {/*<CardHeader>
@@ -102,20 +102,45 @@ export function Chart({ data, players }: { data: any; players: PlayerType[] }) {
                   stroke={colors[player_index]}
                   strokeWidth={2}
                 >
+                  {/* Delta labels at each point */}
+                  <LabelList
+                    dataKey={player.name}
+                    position="top"
+                    content={({ x, y, index }) => {
+                      if (!(player.name in data[index])) return null;
+
+                      const currentValue = data[index][player.name];
+                      const previousValue =
+                        index > 0 && player.name in data[index - 1]
+                          ? data[index - 1][player.name]
+                          : 0;
+                      const delta = currentValue - previousValue;
+
+                      if (delta === 0) return null;
+
+                      return (
+                        <text
+                          x={Number(x) - 20}
+                          y={Number(y) - 10}
+                          fontSize={11}
+                          fill={delta > 0 ? "#16a34a" : "#dc2626"}
+                          fontWeight="bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                        >
+                          {delta > 0 ? "+" : "-"}{currency}{Math.abs(delta)}
+                        </text>
+                      );
+                    }}
+                  />
+                  {/* Player name label at the last point */}
                   <LabelList
                     dataKey={player.name}
                     position="right"
                     content={({ x, y, index }) => {
-                      // // Only render for the last point
                       const isLast = index === data.length - 1;
                       if (!isLast) return null;
                       if (!(player.name in data[index])) return null;
-                      // if (
-                      //   (players.length > 6 && index > players.length - 2) ||
-                      //   index < 2
-                      // ) {
-                      //   return null;
-                      // }
                       return (
                         <text
                           x={Number(x) + 6}

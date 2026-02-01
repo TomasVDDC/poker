@@ -101,7 +101,7 @@ class PlayersController < ApplicationController
 
     def serialize_club(club)
       club.as_json(only: [
-        :id
+        :id, :currency
       ])
     end
 
