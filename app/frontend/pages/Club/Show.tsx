@@ -25,6 +25,7 @@ interface ShowProps {
   players: PlayerType[];
   read_only: boolean;
   flash: { notice?: string };
+  money_in_play: string;
 }
 
 export default function Show({
@@ -34,6 +35,7 @@ export default function Show({
   chart_data,
   read_only,
   flash,
+  money_in_play,
 }: ShowProps) {
   const assetsPath = usePage().props;
 
@@ -77,7 +79,12 @@ export default function Show({
 
           {/* Player Leaderboard */}
           <Card className="p-4 shadow-md rounded-2xl my-5">
-            <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-medium">
+                {money_in_play} in play
+              </span>
+            </div>
             <div className="divide-y divide-gray-200">
               {players.map((player, index) => (
                 <div

@@ -19,6 +19,7 @@ class ClubsController < ApplicationController
   def show
     @games = @club.games.order(created_at: :desc)
     @players = @club.players
+    money_in_play = calculate_money_in_play(@players)
     render inertia: 'Club/Show', props: {
       club: serialize_club(@club),
       games: @games.map do |game|
@@ -26,7 +27,8 @@ class ClubsController < ApplicationController
       end,
       players: serialize_and_transform_players(@players),
       chart_data: create_chart(@club),
-      read_only: false
+      read_only: false,
+      money_in_play: number_to_currency(money_in_play, unit: @club.currency)
     }
   end
 
@@ -150,6 +152,15 @@ class ClubsController < ApplicationController
 
     def calculate_pot(game)
       number_to_currency(game.player_sessions.pluck(:winnings).sum, :unit => game.club.currency)
+    end
+
+    def calculate_money_in_play(players)
+      players.sum do |player|
+        net_profit = player.player_sessions.sum do |session|
+          session.winnings - (session.number_of_buy_ins * session.game.buy_in)
+        end
+        net_profit > 0 ? net_profit : 0
+      end
     end
 
     def create_chart(club)
