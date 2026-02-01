@@ -92,7 +92,7 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
                 axisLine={false}
                 tickMargin={8}
               />
-              <YAxis domain={[-maxAbsValue, maxAbsValue]} />
+              <YAxis domain={[-maxAbsValue, maxAbsValue]} tickFormatter={(value) => value.toFixed(2)} />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <ReferenceLine
                 y={0}
