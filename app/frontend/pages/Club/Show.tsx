@@ -56,7 +56,7 @@ export default function Show({
 
   return (
     <>
-      <div className="mx-auto container p-3">
+      <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
         <div className="mx-auto">
           {flash.notice && (
             <p className="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block">
