@@ -128,6 +128,13 @@ export const ColumnHeaders: ColumnDef<GameListItemType>[] = [
     },
   },
   {
+    accessorKey: "player_count",
+    header: () => <div className="sm:text-xl text-right"> Players </div>,
+    cell: ({ row }) => {
+      return <div className="text-right">{row.getValue("player_count")}</div>;
+    },
+  },
+  {
     accessorKey: "formatted_buy_in",
     header: () => <div className="sm:text-xl text-right"> Buy In </div>,
     cell: ({ row }) => {

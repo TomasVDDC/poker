@@ -14,6 +14,7 @@ export type GameListItemType = {
   pot: number;
   formatted_buy_in: string;
   date: string;
+  player_count: number;
 };
 
 export type GameFormType = Omit<

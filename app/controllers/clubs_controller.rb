@@ -152,7 +152,8 @@ class ClubsController < ApplicationController
       game.as_json(only: [
         :id, :club_id, :date
       ]).merge(pot: calculate_pot(game),
-        formatted_buy_in: number_to_currency(game.buy_in, :unit => game.club.currency))
+        formatted_buy_in: number_to_currency(game.buy_in, :unit => game.club.currency),
+        player_count: game.player_sessions.size)
     end
 
     def calculate_pot(game)
