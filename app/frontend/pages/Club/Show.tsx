@@ -88,7 +88,9 @@ export default function Show({
               {players.map((player, index) => (
                 <div
                   onClick={() =>
-                    router.get(`/clubs/${club.id}/players/${player.id}`)
+                    read_only
+                      ? router.get(`/clubs/shared/${club.share_token}/players/${player.id}`)
+                      : router.get(`/clubs/${club.id}/players/${player.id}`)
                   }
                   key={player.name}
                   className="flex justify-between cursor-pointer items-center py-2 text-sm sm:text-base"

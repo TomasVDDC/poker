@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   # Unauthenticated routes
   get "clubs/shared/:share_token" => "clubs#shared"
   get "clubs/shared/:share_token/games/:id" => "games#shared"
+  get "clubs/shared/:share_token/players/:id" => "players#shared"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

@@ -20,6 +20,8 @@ interface ShowProps {
   player: PlayerType;
   club: ClubType;
   flash: { notice?: string };
+  read_only?: boolean;
+  share_token?: string;
 }
 
 // const chart_data = [
@@ -37,6 +39,8 @@ export default function Show({
   chart_data,
   stats,
   flash,
+  read_only,
+  share_token,
 }: ShowProps) {
   console.log("Show props:", {
     club,
@@ -90,7 +94,11 @@ export default function Show({
           <Chart data={chart_data} players={[player]} currency={club.currency} />
 
           <Button
-            onClick={() => router.get(`/clubs/${club.id}`)}
+            onClick={() =>
+              read_only
+                ? router.get(`/clubs/shared/${share_token}`)
+                : router.get(`/clubs/${club.id}`)
+            }
             className="mt-2 text-gray-700 hover:bg-gray-100 rounded-lg py-3 px-5 bg-gray-100 sm:text-base text-sm cursor-pointer"
           >
             Back to club

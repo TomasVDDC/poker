@@ -1,6 +1,8 @@
 include ActionView::Helpers::NumberHelper
 
 class PlayersController < ApplicationController
+  allow_unauthenticated_access only: %i[ shared ]
+
   before_action :set_player, only: %i[ show edit update destroy ]
   before_action :set_club, only: %i[ new show edit create update destroy]
 
@@ -23,6 +25,19 @@ class PlayersController < ApplicationController
       stats: create_stats(@player),
       player: serialize_player(@player),
       club: serialize_club(@club)
+    }
+  end
+
+  def shared
+    @club = Club.find_by!(share_token: params[:share_token])
+    @player = @club.players.find(params[:id])
+    render inertia: "Player/Show", props: {
+      chart_data: create_chart(@player),
+      stats: create_stats(@player),
+      player: serialize_player(@player),
+      club: serialize_club(@club),
+      read_only: true,
+      share_token: params[:share_token]
     }
   end
 
