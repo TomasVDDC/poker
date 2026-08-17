@@ -112,20 +112,20 @@ export const ColumnHeaders: ColumnDef<PlayerSessionListItemType>[] = [
     },
   },
   {
-    accessorKey: "formatted_winnings",
-    header: () => <div className="sm:text-xl text-right"> Winnings </div>,
+    accessorKey: "formatted_amount_in",
+    header: () => <div className="sm:text-xl text-right"> Bought In </div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right">{row.getValue("formatted_winnings")}</div>
+        <div className="text-right">{row.getValue("formatted_amount_in")}</div>
       );
     },
   },
   {
-    accessorKey: "number_of_buy_ins",
-    header: () => <div className="sm:text-xl text-right"> Buy Ins </div>,
+    accessorKey: "formatted_amount_out",
+    header: () => <div className="sm:text-xl text-right"> Cashed Out </div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right">{row.getValue("number_of_buy_ins")}</div>
+        <div className="text-right">{row.getValue("formatted_amount_out")}</div>
       );
     },
   },

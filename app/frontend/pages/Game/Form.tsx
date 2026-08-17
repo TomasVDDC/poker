@@ -37,11 +37,12 @@ export default function Form({ game, onSubmit, submitText }: FormProps) {
         <label htmlFor="buy_in">Buy in</label>
         <input
           type="number"
+          step="0.01"
           name="buy_in"
           id="buy_in"
           value={data.buy_in}
           className="block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"
-          onChange={(e) => setData("buy_in", parseInt(e.target.value))}
+          onChange={(e) => setData("buy_in", parseFloat(e.target.value))}
         />
         {errors.buy_in && (
           <div className="text-red-500 px-3 py-2 font-medium">

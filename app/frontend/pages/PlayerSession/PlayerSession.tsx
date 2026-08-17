@@ -8,12 +8,12 @@ export default function PlayerSession({ player_session }: PlayerSessionProps) {
   return (
     <div>
       <p className="my-5">
-        <strong className="block font-medium mb-1">Number of buy ins:</strong>
-        {player_session.number_of_buy_ins?.toString()}
+        <strong className="block font-medium mb-1">Bought in for:</strong>
+        {player_session.amount_in?.toString()}
       </p>
       <p className="my-5">
-        <strong className="block font-medium mb-1">Winnings:</strong>
-        {player_session.winnings?.toString()}
+        <strong className="block font-medium mb-1">Cashed out for:</strong>
+        {player_session.amount_out?.toString()}
       </p>
     </div>
   )

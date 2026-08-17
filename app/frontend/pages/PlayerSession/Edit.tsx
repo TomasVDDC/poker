@@ -2,13 +2,15 @@ import { Head, Link } from "@inertiajs/react";
 import Form from "./Form";
 import { PlayerSessionType } from "./types";
 import { ClubType } from "../Club/types";
+import { GameType } from "../Game/types";
 
 interface EditProps {
   club: ClubType;
+  game: GameType;
   player_session: PlayerSessionType;
 }
 
-export default function Edit({ club, player_session }: EditProps) {
+export default function Edit({ club, game, player_session }: EditProps) {
   return (
     <>
       <Head title="Editing player session" />
@@ -18,6 +20,8 @@ export default function Edit({ club, player_session }: EditProps) {
 
         <Form
           player_session={player_session}
+          buy_in={game.buy_in}
+          currency={club.currency}
           onSubmit={(form) => {
             form.transform((data) => ({
               player_session: data,

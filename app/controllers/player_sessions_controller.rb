@@ -25,7 +25,8 @@ class PlayerSessionsController < ApplicationController
 
   # GET /player_sessions/new
   def new
-    @player_session = PlayerSession.new
+    # Prefill with the game's standard buy in, which the form can top up by any amount.
+    @player_session = PlayerSession.new(amount_in: @game.buy_in, amount_out: 0)
     # Don't show players that already have a session
     @players = @club.players.reject { |o| @game.player_sessions.pluck(:player_id).include?(o.id)}
 
@@ -43,6 +44,7 @@ class PlayerSessionsController < ApplicationController
   def edit
     render inertia: 'PlayerSession/Edit', props: {
       club: serialize_club(@club),
+      game: serialize_game(@game),
       player_session: serialize_player_session(@player_session)
     }
   end
@@ -105,25 +107,25 @@ class PlayerSessionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def player_session_params
-      params.require(:player_session).permit(:number_of_buy_ins, :winnings)
+      params.require(:player_session).permit(:amount_in, :amount_out)
     end
 
     def serialize_club(club)
       club.as_json(only: [
-        :id
+        :id, :currency
       ])
     end
 
     def serialize_game(game)
       game.as_json(only: [
         :id
-      ])
+      ]).merge(buy_in: game.buy_in.to_f)
     end
 
     def serialize_player_session(player_session)
       player_session.as_json(only: [
-        :id, :game_id, :number_of_buy_ins, :winnings
-      ])
+        :id, :game_id
+      ]).merge(amount_in: player_session.amount_in.to_f, amount_out: player_session.amount_out.to_f)
     end
 
     def serialize_player(player)

@@ -2,6 +2,10 @@
 
 one:
   name: MyString
+  currency: "£"
+  share_token: token_one
 
 two:
   name: MyString
+  currency: "£"
+  share_token: token_two

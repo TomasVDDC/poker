@@ -14,8 +14,8 @@ class PlayerSessionsTest < ApplicationSystemTestCase
     visit player_sessions_url
     click_on "New player session"
 
-    fill_in "Number of buy ins", with: @player_session.number_of_buy_ins
-    fill_in "Winnings", with: @player_session.winnings
+    fill_in "Total bought in for", with: @player_session.amount_in
+    fill_in "Cashed out for", with: @player_session.amount_out
     click_on "Create Player session"
 
     assert_text "Player session was successfully created"
@@ -26,8 +26,8 @@ class PlayerSessionsTest < ApplicationSystemTestCase
     visit player_session_url(@player_session)
     click_on "Edit this player session", match: :first
 
-    fill_in "Number of buy ins", with: @player_session.number_of_buy_ins
-    fill_in "Winnings", with: @player_session.winnings
+    fill_in "Total bought in for", with: @player_session.amount_in
+    fill_in "Cashed out for", with: @player_session.amount_out
     click_on "Update Player session"
 
     assert_text "Player session was successfully updated"

@@ -1,4 +1,3 @@
-include ActionView::Helpers::NumberHelper
 
 class PlayersController < ApplicationController
   allow_unauthenticated_access only: %i[ shared ]
@@ -137,7 +136,7 @@ class PlayersController < ApplicationController
         data_point = {}
         data_point["date"] = player_session.game.date
 
-        winnings += player_session.winnings - (player_session.number_of_buy_ins * player_session.game.buy_in)
+        winnings += player_session.net_profit.to_f
 
         data_point[player_session.player.name] = winnings
         chart_data << data_point
@@ -149,8 +148,8 @@ class PlayersController < ApplicationController
     def create_stats(player)
       stats = {}
       stats["number_of_games"] = player.player_sessions.length
-      biggest_win = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.max
-      biggest_loss = player.player_sessions.map{ |p| p.winnings - (p.number_of_buy_ins * p.game.buy_in)}.min
+      biggest_win = player.player_sessions.map(&:net_profit).max
+      biggest_loss = player.player_sessions.map(&:net_profit).min
       stats["biggest_win"] = number_to_currency(biggest_win, :unit => player.club.currency)
       stats["biggest_loss"] = number_to_currency(biggest_loss, :unit => player.club.currency)
       return stats

@@ -1,4 +1,3 @@
-include ActionView::Helpers::NumberHelper
 
 class ClubsController < ApplicationController
   allow_unauthenticated_access only: %i[ shared ]
@@ -126,17 +125,12 @@ class ClubsController < ApplicationController
     def serialize_and_transform_players(players)
       net_profit_over_all_games = Array.new
       players.map do |player|
-        acc = 0
-        player.player_sessions.map do |player_session|
-         acc += player_session.winnings - ( player_session.number_of_buy_ins * player_session.game.buy_in )
-        end
-        net_profit_over_all_games << acc
+        net_profit_over_all_games << player.player_sessions.sum(&:net_profit)
       end
 
       logger.info "net profit over all games #{net_profit_over_all_games}"
       players_sorted = players.zip(net_profit_over_all_games).sort_by { |_ , net_profit| net_profit }.reverse
 
-      # players = players.sort_by { |a| a.player_sessions.sum(:winnings) - ( a.player_sessions.sum(:number_of_buy_ins) * buy_in )}
       logger.info "player_sorted by total_net_profit_or_loss #{players}"
       players_sorted.map do |player, net_profit|
         player.as_json(only: [
@@ -157,14 +151,12 @@ class ClubsController < ApplicationController
     end
 
     def calculate_pot(game)
-      number_to_currency(game.player_sessions.pluck(:winnings).sum, :unit => game.club.currency)
+      number_to_currency(game.player_sessions.sum(:amount_out), :unit => game.club.currency)
     end
 
     def calculate_money_in_play(players)
       players.sum do |player|
-        net_profit = player.player_sessions.sum do |session|
-          session.winnings - (session.number_of_buy_ins * session.game.buy_in)
-        end
+        net_profit = player.player_sessions.sum(&:net_profit)
         net_profit > 0 ? net_profit : 0
       end
     end
@@ -177,8 +169,7 @@ class ClubsController < ApplicationController
         data_point = {}
         data_point["date"] = game.date
         game.player_sessions.each do |player_session|
-          net_winnings = player_session.winnings - (player_session.number_of_buy_ins * game.buy_in)
-          cumulative[player_session.player.name] += net_winnings
+          cumulative[player_session.player.name] += player_session.net_profit.to_f
           data_point[player_session.player.name] = cumulative[player_session.player.name]
         end
 
@@ -194,7 +185,7 @@ class ClubsController < ApplicationController
 
       streak = 0
       sessions.each do |session|
-        profit = session.winnings - (session.number_of_buy_ins * session.game.buy_in)
+        profit = session.net_profit
         logger.info "Session date: #{session.game.date}, profit: #{profit}"
         break if profit <= 0
         streak += 1
@@ -207,10 +198,10 @@ class ClubsController < ApplicationController
       best_session = club.games
         .includes(player_sessions: [:player, :game])
         .flat_map(&:player_sessions)
-        .max_by { |ps| ps.winnings - (ps.number_of_buy_ins * ps.game.buy_in) }
+        .max_by(&:net_profit)
 
       return nil unless best_session
-      profit = best_session.winnings - (best_session.number_of_buy_ins * best_session.game.buy_in)
+      profit = best_session.net_profit
       return nil if profit <= 0
       { player_name: best_session.player.name, amount: number_to_currency(profit, unit: club.currency) }
     end
@@ -219,10 +210,10 @@ class ClubsController < ApplicationController
       worst_session = club.games
         .includes(player_sessions: [:player, :game])
         .flat_map(&:player_sessions)
-        .min_by { |ps| ps.winnings - (ps.number_of_buy_ins * ps.game.buy_in) }
+        .min_by(&:net_profit)
 
       return nil unless worst_session
-      loss = worst_session.winnings - (worst_session.number_of_buy_ins * worst_session.game.buy_in)
+      loss = worst_session.net_profit
       return nil if loss >= 0
       { player_name: worst_session.player.name, amount: number_to_currency(loss, unit: club.currency) }
     end

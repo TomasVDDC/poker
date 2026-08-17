@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_28_214828) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
+  create_table "_litestream_lock", id: false, force: :cascade do |t|
+    t.integer "id"
+  end
+
+  create_table "_litestream_seq", force: :cascade do |t|
+    t.integer "seq"
+  end
+
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -21,7 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_28_214828) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.float "buy_in"
+    t.decimal "buy_in", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "club_id", null: false
@@ -30,14 +38,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_28_214828) do
   end
 
   create_table "player_sessions", force: :cascade do |t|
-    t.integer "number_of_buy_ins"
-    t.float "winnings"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "game_id", null: false
     t.integer "player_id", null: false
+    t.decimal "amount_in", precision: 10, scale: 2
+    t.decimal "amount_out", precision: 10, scale: 2
     t.index ["game_id"], name: "index_player_sessions_on_game_id"
     t.index ["player_id"], name: "index_player_sessions_on_player_id"
+  end
+
+  create_table "player_sessions_pre_amounts", force: :cascade do |t|
+    t.integer "player_session_id", null: false
+    t.integer "number_of_buy_ins"
+    t.float "winnings"
   end
 
   create_table "players", force: :cascade do |t|

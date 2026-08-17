@@ -17,7 +17,7 @@ class PlayerSessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create player_session" do
     assert_difference("PlayerSession.count") do
-      post player_sessions_url, params: { player_session: { number_of_buy_ins: @player_session.number_of_buy_ins, winnings: @player_session.winnings } }
+      post player_sessions_url, params: { player_session: { amount_in: @player_session.amount_in, amount_out: @player_session.amount_out } }
     end
 
     assert_redirected_to player_session_url(PlayerSession.last)
@@ -34,7 +34,7 @@ class PlayerSessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update player_session" do
-    patch player_session_url(@player_session), params: { player_session: { number_of_buy_ins: @player_session.number_of_buy_ins, winnings: @player_session.winnings } }
+    patch player_session_url(@player_session), params: { player_session: { amount_in: @player_session.amount_in, amount_out: @player_session.amount_out } }
     assert_redirected_to player_session_url(@player_session)
   end
 

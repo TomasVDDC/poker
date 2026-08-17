@@ -62,6 +62,8 @@ export default function New({ club, game, player_session, players }: NewProps) {
 
         <Form
           player_session={player_session}
+          buy_in={game.buy_in}
+          currency={club.currency}
           onSubmit={(form) => {
             form.transform((data) => ({
               player_session: data,

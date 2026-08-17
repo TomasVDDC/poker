@@ -2,6 +2,10 @@
 
 one:
   buy_in: 1.5
+  club: one
+  date: "1st January 2025"
 
 two:
   buy_in: 1.5
+  club: two
+  date: "2nd January 2025"
