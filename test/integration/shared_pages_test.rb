@@ -39,6 +39,14 @@ class SharedPagesTest < ActionDispatch::IntegrationTest
     assert_equal "£7.50", winner["net_profit"]
   end
 
+  test "shared player page reports stats from the new amounts" do
+    props = page_props("/clubs/shared/#{@club.share_token}/players/#{@winner.id}")
+
+    assert_equal 1, props.dig("stats", "number_of_games")
+    assert_equal "£7.50", props.dig("stats", "biggest_win")
+    assert_equal [{ "date" => @game.date, "Winner" => 7.5 }], props["chart_data"]
+  end
+
   private
     # Inertia embeds the page object in the HTML shell as a data attribute.
     def page_props(path)
