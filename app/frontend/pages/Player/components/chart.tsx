@@ -26,6 +26,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { PlayerType } from "@/pages/Player/types";
+import { ChartLabel, LABEL_ROOM, useLabelPlacer } from "@/lib/chart-labels";
 
 // https://www.heavy.ai/blog/12-color-palettes-for-telling-better-stories-with-your-data
 // combination of retro metro and river nights color palettes
@@ -61,6 +62,8 @@ const colors = [
 const chartConfig = {} satisfies ChartConfig;
 
 export function Chart({ data, players, currency }: { data: any; players: PlayerType[]; currency: string }) {
+  const labels = useLabelPlacer();
+
   const maxAbsValue = Math.max(
     ...data.flatMap((point: any) =>
       players.map((player) => Math.abs(point[player.name] ?? 0))
@@ -80,7 +83,7 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
               accessibilityLayer
               data={data}
               margin={{
-                top: 30,
+                top: 12,
                 left: 12,
                 right: 60,
               }}
@@ -92,7 +95,13 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
                 axisLine={false}
                 tickMargin={8}
               />
-              <YAxis domain={[-maxAbsValue, maxAbsValue]} tickFormatter={(value) => value.toFixed(2)} />
+              <YAxis
+                domain={[-maxAbsValue, maxAbsValue]}
+                tickFormatter={(value) => value.toFixed(2)}
+                // Room for the stacked labels above the highest point and
+                // below the lowest.
+                padding={{ top: LABEL_ROOM, bottom: LABEL_ROOM }}
+              />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <ReferenceLine
                 y={0}
@@ -113,8 +122,7 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
                     dataKey={player.name}
                     position="top"
                     content={({ x, y, index }) => {
-                      if (!(player.name in data[index])) return null;
-
+                      if (index === undefined) return null;
                       const currentValue = data[index][player.name];
                       const previousValue =
                         index > 0 && player.name in data[index - 1]
@@ -122,20 +130,32 @@ export function Chart({ data, players, currency }: { data: any; players: PlayerT
                           : 0;
                       const delta = currentValue - previousValue;
 
-                      if (delta === 0) return null;
+                      if (currentValue === undefined || delta === 0) {
+                        labels.skip(player_index, index);
+                        return null;
+                      }
 
+                      // Gains sit above the point and losses below, stepping
+                      // further out to clear earlier labels.
+                      const text = `${delta > 0 ? "+" : "-"}${currency}${Math.abs(delta).toFixed(2)}`;
+                      const placement = labels.place({
+                        series: player_index,
+                        index,
+                        count: data.length,
+                        x: Number(x),
+                        y: Number(y),
+                        text,
+                        direction: delta > 0 ? "up" : "down",
+                      });
                       return (
-                        <text
-                          x={Number(x) - 20}
-                          y={Number(y) - 10}
-                          fontSize={11}
-                          fill={delta > 0 ? "#16a34a" : "#dc2626"}
-                          fontWeight="bold"
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          {delta > 0 ? "+" : "-"}{currency}{Math.abs(delta).toFixed(2)}
-                        </text>
+                        placement && (
+                          <ChartLabel
+                            placement={placement}
+                            fill={delta > 0 ? "#16a34a" : "#dc2626"}
+                          >
+                            {text}
+                          </ChartLabel>
+                        )
                       );
                     }}
                   />
