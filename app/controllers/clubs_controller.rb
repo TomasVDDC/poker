@@ -198,6 +198,7 @@ class ClubsController < ApplicationController
       best_session = club.games
         .includes(player_sessions: [:player, :game])
         .flat_map(&:player_sessions)
+        .reverse # on a tie, the latest player to reach the record holds it
         .max_by(&:net_profit)
 
       return nil unless best_session
@@ -210,6 +211,7 @@ class ClubsController < ApplicationController
       worst_session = club.games
         .includes(player_sessions: [:player, :game])
         .flat_map(&:player_sessions)
+        .reverse # on a tie, the latest player to reach the record holds it
         .min_by(&:net_profit)
 
       return nil unless worst_session

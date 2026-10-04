@@ -132,9 +132,13 @@ export function Chart({
                     if (index === undefined) return null;
                     const value = data[index][record];
                     if (value === undefined) return null;
-                    const previous =
-                      index > 0 ? data[index - 1][record] : undefined;
-                    if (previous === value) return null;
+                    // Label where the record changed hands or amount.
+                    const previous = index > 0 ? data[index - 1] : undefined;
+                    if (
+                      previous?.[record] === value &&
+                      previous?.player === data[index].player
+                    )
+                      return null;
 
                     const text = `${data[index].player} ${formatAmount(value, currency)}`;
                     const width = measureLabel(text);

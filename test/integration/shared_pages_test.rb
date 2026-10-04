@@ -60,6 +60,24 @@ class SharedPagesTest < ActionDispatch::IntegrationTest
     assert_equal 1, loss.dig("stats", "times_broken")
   end
 
+  test "matching a record hands it to the latest player to reach it" do
+    later = Game.create!(club: @club, buy_in: 5, date: "3rd January 2025")
+    # Winner loses exactly the £7.50 that Loser lost in the first game.
+    PlayerSession.create!(game: later, player: @winner, amount_in: 7.50, amount_out: 0)
+    PlayerSession.create!(game: later, player: @loser, amount_in: 5, amount_out: 12.50)
+
+    loss = page_props("/clubs/shared/#{@club.share_token}/records/biggest_loss")
+    assert_equal [
+      { "date" => @game.date, "biggest_loss" => -7.5, "player" => "Loser" },
+      { "date" => later.date, "biggest_loss" => -7.5, "player" => "Winner" }
+    ], loss["chart_data"]
+    assert_equal({ "player_name" => "Winner", "amount" => "-£7.50", "times_broken" => 2 }, loss["stats"])
+
+    club = page_props("/clubs/shared/#{@club.share_token}")
+    assert_equal({ "player_name" => "Winner", "amount" => "-£7.50" }, club["biggest_loss"])
+    assert_equal({ "player_name" => "Loser", "amount" => "£7.50" }, club["biggest_win"])
+  end
+
   test "shared record page rejects unknown records" do
     get "/clubs/shared/#{@club.share_token}/records/most_rebuys"
     assert_response :not_found

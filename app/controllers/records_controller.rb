@@ -40,16 +40,18 @@ class RecordsController < ApplicationController
 
     # One point per game holding the record up to and including that game, and
     # who set it. The record only exists once someone has actually won (or
-    # lost), so early games are left out of the line until then.
+    # lost), so early games are left out of the line until then. Matching the
+    # record takes it over, so it always shows the latest player to reach it.
     def create_chart(club)
       holder = nil
       beats = @record == "biggest_win" ? ->(a, b) { a > b } : ->(a, b) { a < b }
+      matches_or_beats = @record == "biggest_win" ? ->(a, b) { a >= b } : ->(a, b) { a <= b }
 
       club.games.includes(player_sessions: :player).map do |game|
         game.player_sessions.each do |session|
           profit = session.net_profit
           next unless beats.call(profit, 0)
-          holder = session if holder.nil? || beats.call(profit, holder.net_profit)
+          holder = session if holder.nil? || matches_or_beats.call(profit, holder.net_profit)
         end
 
         data_point = { "date" => game.date }
@@ -67,8 +69,8 @@ class RecordsController < ApplicationController
       {
         "player_name" => current&.dig("player"),
         "amount" => current && number_to_currency(current[@record], unit: @club.currency),
-        # How many times the record was set or broken.
-        "times_broken" => set.each_cons(2).count { |a, b| a[@record] != b[@record] } + (set.any? ? 1 : 0)
+        # How many times the record was set, broken or matched by someone new.
+        "times_broken" => set.each_cons(2).count { |a, b| a.values_at(@record, "player") != b.values_at(@record, "player") } + (set.any? ? 1 : 0)
       }
     end
 end
