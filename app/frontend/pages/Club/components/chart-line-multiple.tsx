@@ -26,6 +26,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { PlayerType } from "@/pages/Player/types";
+import { ChartLabel, useLabelPlacer } from "@/lib/chart-labels";
 
 // https://www.heavy.ai/blog/12-color-palettes-for-telling-better-stories-with-your-data
 // combination of retro metro and river nights color palettes
@@ -67,6 +68,8 @@ export function ChartLineMultiple({
   data: any;
   players: PlayerType[];
 }) {
+  const labels = useLabelPlacer();
+
   return (
     <Card className="my-4">
       {/*<CardHeader>
@@ -112,28 +115,34 @@ export function ChartLineMultiple({
                     dataKey={player.name}
                     position="right"
                     content={({ x, y, index }) => {
-                      // // Only render for the last point
-                      const isLast = index === data.length - 1;
-                      if (!isLast) return null;
-                      if (!(player.name in data[index])) return null;
-                      // if (
-                      //   (players.length > 6 && index > players.length - 2) ||
-                      //   index < 2
-                      // ) {
-                      //   return null;
-                      // }
+                      if (index === undefined) return null;
+                      // Name each line at its last point, stepping above or
+                      // below to clear players who finished close by.
+                      if (
+                        index !== data.length - 1 ||
+                        !(player.name in data[index])
+                      ) {
+                        labels.skip(player_index, index);
+                        return null;
+                      }
+                      const placement = labels.place({
+                        series: player_index,
+                        index,
+                        count: data.length,
+                        x: Number(x),
+                        y: Number(y),
+                        text: player.name,
+                        direction: "right",
+                      });
                       return (
-                        <text
-                          x={Number(x) + 6}
-                          y={Number(y) - 6}
-                          fontSize={10}
-                          fill={colors[player_index]}
-                          fontWeight="bold"
-                          textAnchor="start"
-                          dominantBaseline="middle"
-                        >
-                          {player.name}
-                        </text>
+                        placement && (
+                          <ChartLabel
+                            placement={placement}
+                            fill={colors[player_index]}
+                          >
+                            {player.name}
+                          </ChartLabel>
+                        )
                       );
                     }}
                   />

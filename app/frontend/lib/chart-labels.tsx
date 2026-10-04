@@ -46,7 +46,9 @@ export interface LabelRequest {
   x: number;
   y: number;
   text: string;
-  direction: "up" | "down";
+  // "up"/"down": centred over or under the point, stepping further out.
+  // "right": just right of the point, stepping alternately above and below.
+  direction: "up" | "down" | "right";
 }
 
 export function useLabelPlacer() {
@@ -66,19 +68,40 @@ export function useLabelPlacer() {
   }: LabelRequest): LabelPlacement | null => {
     const key = order(series, index);
     const width = measure(text);
-    const anchor =
-      index === 0 ? "start" : index === count - 1 ? "end" : "middle";
+    const beside = direction === "right";
+    const anchor = beside
+      ? "start"
+      : index === 0
+        ? "start"
+        : index === count - 1
+          ? "end"
+          : "middle";
+    const labelX = beside ? x + 6 : x;
     const left =
-      anchor === "start" ? x : anchor === "end" ? x - width : x - width / 2;
+      anchor === "start"
+        ? labelX
+        : anchor === "end"
+          ? labelX - width
+          : labelX - width / 2;
     const right = left + width;
 
     const earlier = [...placed.current]
       .filter(([other]) => other < key)
       .map(([, box]) => box);
     const sign = direction === "up" ? -1 : 1;
+    // Beside the point: level with it, then one row above, one below, two
+    // above... Over or under it: GAP away, then a row further each time.
+    const centres = beside
+      ? Array.from(
+          { length: MAX_ROWS * 2 - 1 },
+          (_, i) => y + (i % 2 ? -1 : 1) * Math.ceil(i / 2) * ROW_HEIGHT,
+        )
+      : Array.from(
+          { length: MAX_ROWS },
+          (_, row) => y + sign * (GAP + row * ROW_HEIGHT),
+        );
 
-    for (let row = 0; row < MAX_ROWS; row++) {
-      const centre = y + sign * (GAP + row * ROW_HEIGHT);
+    for (const centre of centres) {
       const collides = earlier.some(
         (box) =>
           Math.abs(box.centre - centre) < ROW_HEIGHT &&
@@ -87,7 +110,7 @@ export function useLabelPlacer() {
       );
       if (!collides) {
         placed.current.set(key, { left, right, centre });
-        return { x, y: centre, anchor };
+        return { x: labelX, y: centre, anchor };
       }
     }
 
