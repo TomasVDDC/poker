@@ -52,6 +52,11 @@ export default function Show({
     flash,
     assetsPath,
   });
+  const goToRecord = (record: "biggest_win" | "biggest_loss") =>
+    read_only
+      ? router.get(`/clubs/shared/${club.share_token}/records/${record}`)
+      : router.get(`/clubs/${club.id}/records/${record}`);
+
   const shareUrl = `https://${window.location.host}/clubs/shared/${club.share_token}`;
 
   return (
@@ -129,14 +134,20 @@ export default function Show({
               <div className="text-sm font-bold text-blue-700">{money_in_play}</div>
             </div>
             {biggest_win && (
-              <div className="bg-green-50 rounded-lg p-3">
+              <div
+                onClick={() => goToRecord("biggest_win")}
+                className="bg-green-50 rounded-lg p-3 cursor-pointer hover:bg-green-100"
+              >
                 <div className="text-xs text-green-600 font-medium">Biggest Win</div>
                 <div className="text-sm font-bold text-green-700">{biggest_win.amount}</div>
                 <div className="text-xs text-green-600">{biggest_win.player_name}</div>
               </div>
             )}
             {biggest_loss && (
-              <div className="bg-red-50 rounded-lg p-3">
+              <div
+                onClick={() => goToRecord("biggest_loss")}
+                className="bg-red-50 rounded-lg p-3 cursor-pointer hover:bg-red-100"
+              >
                 <div className="text-xs text-red-600 font-medium">Biggest Loss</div>
                 <div className="text-sm font-bold text-red-700">{biggest_loss.amount}</div>
                 <div className="text-xs text-red-600">{biggest_loss.player_name}</div>

@@ -39,6 +39,32 @@ class SharedPagesTest < ActionDispatch::IntegrationTest
     assert_equal "£7.50", winner["net_profit"]
   end
 
+  test "shared record page tracks the biggest win over time" do
+    later = Game.create!(club: @club, buy_in: 5, date: "3rd January 2025")
+    # A bigger win breaks the record; a smaller loss leaves the old one standing.
+    PlayerSession.create!(game: later, player: @loser, amount_in: 5, amount_out: 25)
+    PlayerSession.create!(game: later, player: @winner, amount_in: 5, amount_out: 0)
+
+    win = page_props("/clubs/shared/#{@club.share_token}/records/biggest_win")
+    assert_equal [
+      { "date" => @game.date, "biggest_win" => 7.5, "player" => "Winner" },
+      { "date" => later.date, "biggest_win" => 20.0, "player" => "Loser" }
+    ], win["chart_data"]
+    assert_equal({ "player_name" => "Loser", "amount" => "£20.00", "times_broken" => 2 }, win["stats"])
+
+    loss = page_props("/clubs/shared/#{@club.share_token}/records/biggest_loss")
+    assert_equal [
+      { "date" => @game.date, "biggest_loss" => -7.5, "player" => "Loser" },
+      { "date" => later.date, "biggest_loss" => -7.5, "player" => "Loser" }
+    ], loss["chart_data"]
+    assert_equal 1, loss.dig("stats", "times_broken")
+  end
+
+  test "shared record page rejects unknown records" do
+    get "/clubs/shared/#{@club.share_token}/records/most_rebuys"
+    assert_response :not_found
+  end
+
   test "shared player page reports stats from the new amounts" do
     props = page_props("/clubs/shared/#{@club.share_token}/players/#{@winner.id}")
 

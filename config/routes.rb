@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resources :clubs do
+    get "records/:record" => "records#show", as: :record
     resources :players
     resources :games do
       resources :player_sessions
@@ -17,6 +18,7 @@ Rails.application.routes.draw do
   get "clubs/shared/:share_token" => "clubs#shared"
   get "clubs/shared/:share_token/games/:id" => "games#shared"
   get "clubs/shared/:share_token/players/:id" => "players#shared"
+  get "clubs/shared/:share_token/records/:record" => "records#shared"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
