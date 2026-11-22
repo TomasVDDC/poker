@@ -88,7 +88,12 @@ export default function Show({
 
           {/* Player Leaderboard */}
           <Card className="p-4 shadow-md rounded-2xl my-5">
-            <h1 className="font-bold text-xl sm:text-2xl mb-2">Leaderboard</h1>
+            <div className="flex items-baseline justify-between mb-2">
+              <h1 className="font-bold text-xl sm:text-2xl">Leaderboard</h1>
+              <span className="text-xs sm:text-sm text-gray-500">
+                {games.length} {games.length === 1 ? "game" : "games"} played
+              </span>
+            </div>
             <div className="divide-y divide-gray-200">
               {players.map((player, index) => (
                 <div
