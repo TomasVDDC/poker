@@ -113,15 +113,21 @@ export default function Show({
                       </span>
                     )}
                   </div>
-                  <span
-                    className={`font-medium ${
-                      player.net_profit?.includes("-")
-                        ? "text-red-600"
-                        : "text-green-600"
-                    }`}
-                  >
-                    {player.net_profit}
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span
+                      className={`font-medium ${
+                        player.net_profit?.includes("-")
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {player.net_profit}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {player.games_played}{" "}
+                      {player.games_played === 1 ? "game" : "games"}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

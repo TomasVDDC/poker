@@ -137,7 +137,8 @@ class ClubsController < ApplicationController
           :id, :club_id, :name
         ]).merge(
           net_profit: number_to_currency(net_profit, :unit => player.club.currency),
-          winning_streak: calculate_winning_streak(player)
+          winning_streak: calculate_winning_streak(player),
+          games_played: player.player_sessions.size
         )
       end
     end

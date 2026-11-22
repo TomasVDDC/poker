@@ -4,6 +4,7 @@ export interface PlayerType {
   name: string;
   net_profit?: string;
   winning_streak?: number;
+  games_played?: number;
 }
 
 export type PlayerFormType = Omit<PlayerType, "id" | "net_profit" | "club_id">;
